@@ -1,0 +1,7 @@
+*.dev
+*.ico
+*.layout
+*.rc
+*.res
+*.o
+*.win
