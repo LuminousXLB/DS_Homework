@@ -5,3 +5,4 @@
 *.res
 *.o
 *.win
+*_private.h
