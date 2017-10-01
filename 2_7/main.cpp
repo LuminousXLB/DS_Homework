@@ -1,3 +1,16 @@
+/************************************************************
+  * Sample of merging 2 seqList
+
+    Generate 2 seqLists, listA & listB, randomly and then merge them to listC.
+
+  ** Function
+    ```
+    int generateLength ();
+    ```
+    give a random number in a certain range which acts as the length of a seqList
+
+************************************************************/
+
 #include "seqList.h"
 #include <cstdlib>
 #include <ctime>
@@ -7,6 +20,9 @@ using namespace std;
 int generateLength ();
 
 int main() {
+
+//  Generate 2 seqList
+
     srand(time(NULL));
 
     seqList<int> listA, listB;
@@ -19,7 +35,7 @@ int main() {
     cout << "listA\t"<< listA.length();
     listA.traverse();
 	cout << endl << endl;
-	
+
     int lenB = generateLength();
     for (int i = 0; i < lenB; ++i) {
         listB.insert(i, rand());
@@ -28,20 +44,18 @@ int main() {
     cout << "listB\t"<< listB.length();
     listB.traverse();
 	cout << endl << endl;
-	
+
+//	merge
+
 	seqList<int> listC = listA + listB;
-	
+
 	cout << "listC\t"<< listC.length();
     listC.traverse();
 	cout << endl << endl;
-		
+
     return 0;
 }
 
 int generateLength () {
-    int len = 0;
-    while (len <=10 || len >= 20) {
-        len = rand();
-    }
-    return len / 2;
+    return rand % 20 + 5 ;
 }

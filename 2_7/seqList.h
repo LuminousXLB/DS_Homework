@@ -1,3 +1,27 @@
+/************************************************************
+  * Source Code 2-2  Sequence List
+
+  ** Bug
+    ```
+    int seqList<elemType>::search(const elemType &x) const
+    ```
+    i is undefined after the loop
+
+  ** Feature
+    ```
+    void seqList<elemType>::traverse() const
+    ```
+    give a tab after each element
+
+  ** Feature:
+    ```
+    template <class elemType>
+    seqList<elemType> operator+(const seqList<elemType> &listA, const seqList<elemType> &listB)
+    ```
+    merge listA & listB
+
+************************************************************/
+
 #include "list.h"
 
 using namespace std;
@@ -114,14 +138,16 @@ void seqList<elemType>::traverse() const {
 
 template <class elemType>
 seqList<elemType> operator+(const seqList<elemType> &listA, const seqList<elemType> &listB) {
-	seqList<elemType> merge(listA.length() + listB.length() + 1);
+
+	seqList<elemType> merge(listA.length() + listB.length() + 1);  // Initialize a new seqList whose maxLength is the sum of the length of listA & listB
+
     int i, j;
     for (i = 0; i < listA.length(); ++i) {
-        merge.insert(i, listA.visit(i));
+        merge.insert(i, listA.visit(i));  // copy the data of listA to merge
     }
     for (j = 0; j < listB.length(); ++j) {
-        merge.insert(i + j, listB.visit(j));
+        merge.insert(i + j, listB.visit(j)); // copy the data of listB to merge following that of listA
     }
-    
+
     return merge;
 }

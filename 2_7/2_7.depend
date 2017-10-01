@@ -1,0 +1,12 @@
+# depslib dependency file v1.0
+1506818619 source:h:\ds_homework\2_7\main.cpp
+	"seqList.h"
+	<cstdlib>
+	<ctime>
+
+1506788252 h:\ds_homework\2_7\seqlist.h
+	"list.h"
+
+1506788252 h:\ds_homework\2_7\list.h
+	<iostream>
+

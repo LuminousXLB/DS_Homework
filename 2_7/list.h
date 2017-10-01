@@ -1,3 +1,7 @@
+/************************************************************
+  * Source Code 2-1  Abstract Class of List
+************************************************************/
+
 #include <iostream>
 
 template <class elemType>
