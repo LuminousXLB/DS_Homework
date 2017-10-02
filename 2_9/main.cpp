@@ -40,15 +40,23 @@ int main() {
         }
     }
 
-    char ch[80];
-    while(reader.getline(ch, 80, '\n')) {
-    	string str = ch;
-        text.push_back(str);
+    char ch[120];
+    while(!reader.eof()) {
+      // cout << "read a line" << endl;
+      reader.getline(ch, 80, '\n');
+    	string str(ch);
+      // cout << ch << endl;  // 这一行输出是空的？
+      // cout << str << endl;  // 这一行输出也是空的？
+      text.push_back(str);
     }
 
     reader.close();
 
     print(text);
+
+
+    return 0;
+
 
 //  Initilize a writer
     ofstream writer;
@@ -74,8 +82,8 @@ void print (const list<T> &li) {
     if (li.empty()) {
         cout << "EMPTY\t";
     } else {
-        list<T>::const_iterator itr = li.begin();
-        list<T>::const_iterator itre = li.end();
+        typename list<T>::const_iterator itr = li.begin();
+        typename list<T>::const_iterator itre = li.end();
 
         do {
             cout << *itr << '\t';
