@@ -1,93 +1,67 @@
 /************************************************************
   * Line editing system
+	- open
+		```
+		open str
+		```
+		仅此格式合法，
 
-  ** Function
-    ```
-    template <class T>
-    void print (const list<T> &l);
-    ```
-    print all the elements in the list
+	- list
+		```
+		list n1 n2
+		```
+		仅此格式合法，一个合法的list指令表示输出n1到n2这n2-n1+1行。
+
+	- ins
+		```
+		ins i j str
+		```
+		仅此格式合法，表示从i行第j个位置起插入str这个字符串，具体可以看样例，每次加入字符串长度小于100,注意可以加在行末，此时j为行的长度加1。
+
+	- del
+		```
+		del i j num
+		```
+		仅此格式合法，表示从i行第j个位置起删除num个字符，数据保证不会删除整行。
+
+	- quit
+		```
+		quit
+		```
+		退出程序，并且将所有修改后的字符串输出。
+
+
+	// 强行open确认是否保存，或者追加？
+	// 没有open就不不能做别的事
+	// 分段落的问题
 
 ************************************************************/
-
-#include <iostream>
-#include <list>
-#include <string>
-#include <fstream>
+#include "editor.h"
 
 using namespace std;
-
-template <class T>
-void print (const list<T> &l);
 
 int main() {
     cout << "Hello world!" << endl;
 
-//  Initilize a list to store the text
-    list<string> text;
+	TextEditor editor;
 
-//  Read the file
-    ifstream reader;
-    while (true) {
-        char input[80];
-        cout << "Please set the input file: ";
-        cin >> input;
-        reader.open(input);
-        if(reader) {
-            break;
-        } else {
-            cerr << "cannot open input file" << endl;
-        }
-    }
+	char filename[80];
+	cout << "Please input the filename (without spaces): ";
 
-    char ch[120];
-    while(!reader.eof()) {
-      // cout << "read a line" << endl;
-      reader.getline(ch, 80, '\n');
-    	string str(ch);
-      // cout << ch << endl;  // 这一行输出是空的？
-      // cout << str << endl;  // 这一行输出也是空的？
-      text.push_back(str);
-    }
+// OPEN
+	try {
+		cin >> filename;
+		editor.open(filename);
+	} catch (FileOpenFailed) {
+		cerr << "ERROR\tCannot open the file " << filename << endl;
+	}
 
-    reader.close();
-
-    print(text);
-
+// QUIT
+	try {
+		editor.quit();
+	} catch (FileOpenFailed) {
+		cerr << "ERROR\tCannot open the file " << filename << endl;
+	}
 
     return 0;
-
-
-//  Initilize a writer
-    ofstream writer;
-    while (true) {
-        char output[80];
-        cout << "Please set the output file: ";
-        cin >> output;
-        writer.open(output);
-        if(writer) {
-            break;
-        } else {
-            cerr << "cannot open output file" << endl;
-        }
-    }
-
-    writer.close();
-
-    return 0;
-}
-
-template <class T>
-void print (const list<T> &li) {
-    if (li.empty()) {
-        cout << "EMPTY\t";
-    } else {
-        typename list<T>::const_iterator itr = li.begin();
-        typename list<T>::const_iterator itre = li.end();
-
-        do {
-            cout << *itr << '\t';
-            ++itr;
-        } while (itr != itre);
-    }
 }
