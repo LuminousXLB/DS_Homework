@@ -15,7 +15,7 @@ class InvalidRange {};
 
 const bool Start_With_Zero = false;
 const bool Del_Beyond_Line = true;
-const size_t _col_ = 80;
+const size_t _col_ = 20;
 
 class TextEditor {
 private:
@@ -36,10 +36,17 @@ public:
 	TextEditor(const string filename);
 	void open(const string filename);
 	void quit();
-	list<string> & list(const size_t bg, const size_t ed);
+	list<string> list(const size_t bg, const size_t ed);
 	void del(size_t line, size_t col, const size_t len);
 	void ins(size_t line, size_t col, const string istr);
+	size_t cnt_l() {
+		return text_.size();
+	}
+	size_t cnt_c() {
+		return _col_;
+	}
 };
+
 
 void TextEditor::print(ostream & os) {
 	typename list<string>::const_iterator itr = text_.begin();
@@ -91,7 +98,7 @@ void TextEditor::quit() {
 	text_.clear();
 }
 
-list<string> & TextEditor::list(size_t bg, size_t ed) {
+list<string> TextEditor::list(size_t bg, size_t ed) {
 	bg = standardlize(bg);
 	ed = standardlize(ed);
 	if (!validate(bg, ed)) {
@@ -142,7 +149,7 @@ void TextEditor::del(size_t line, size_t col, const size_t len) {
 		itr -> erase(col, len);
 	}
 	// organize
-	while (itrb -> length() < _col_) {
+	while (itrb -> length() <= _col_) {
 		if (itrb -> empty()) {
 			text_.erase(itrb);
 		} else {
@@ -151,7 +158,9 @@ void TextEditor::del(size_t line, size_t col, const size_t len) {
 			*itrb += *itr;
 			*itr = itrb -> substr(_col_ + 1);
 			itrb -> erase(_col_ + 1);
-			if (itrb -> length() == _col_) {
+			cerr << itrb -> length() << endl;
+			cerr << _col_ << endl;
+			if (itrb -> length() == _col_ + 1) {
 				++itrb;
 			} else if (itr -> empty()) {
 				text_.erase(itrb);
