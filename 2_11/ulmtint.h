@@ -50,6 +50,7 @@ bool ulmtint::absmt(const ulmtint & a, const ulmtint & b) {
 			} else if (*aitr < *bitr) {
 				return false;
 			}
+			++aitr, ++bitr;
 		} while (aitr != aitre && bitr != bitre);
 	}
 
@@ -174,7 +175,6 @@ ulmtint operator+ (const ulmtint & oa, const ulmtint & ob) {
 
 	if (flag == 1) {
 		// -
-
 		/**/cout << DEBUG << a << "\t-\t" << b << endl;
 
 		do {
@@ -209,15 +209,31 @@ ulmtint operator+ (const ulmtint & oa, const ulmtint & ob) {
 			throw "Uncaught Error";
 		}
 
-		typename list<char>::const_iterator rete = ret.data_.end();
 
-		/**/cout << DEBUG << unsigned(*rete) << endl;
-		// while (*ret.data_.end() == 0) {
-		// 	ret.data_.pop_back();
+		// typename list<char>::const_iterator rete = ret.data_.end();
+
+
+		typename list<char>::const_iterator back = ret.data_.end();
+		--back;
+		while (*back == 0) {
+			ret.data_.pop_back();
+			back = ret.data_.end();
+			--back;
+		}
+
+
+		// cout << DEBUG <<  << endl;
+		// if (true) {
+		// 	typename list<char>::const_iterator itr = ret.data_.begin();
+		// 	typename list<char>::const_iterator itre = ret.data_.end();
+		// 	--itre;
+		// 	while (itr != itre) {
+		// 		cout << DEBUG << unsigned(*itr) << endl;
+		// 		++itr;
+		// 	}
 		// }
 	} else {
 		// +
-
 		ret.sgn_ = a.sgn_;
 		do {
 			digit = *aitr + *bitr + carry;
