@@ -2,9 +2,9 @@
   * Line editing system
 	- open
 		```
-		open str
+		open filename
 		```
-		仅此格式合法，
+		仅此格式合法，打开文件filename
 
 	- list
 		```
