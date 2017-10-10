@@ -1,8 +1,11 @@
 *.dev
+*.cbp
+*.depend
 *.ico
 *.layout
 *.rc
 *.res
 *.o
 *.win
+*.exe
 *_private.h
