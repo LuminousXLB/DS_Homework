@@ -58,11 +58,11 @@ bool ulmtint::absmt(const ulmtint & a, const ulmtint & b) {
 
 
 ulmtint::ulmtint(int num) {
-	if (num > 0) {
-		sgn_ = 0;
-	} else {
+	if (num < 0) {
 		sgn_ = 1;
 		num = -num;
+	} else {
+		sgn_ = 0;
 	}
 	string str = to_string(num);
 	for (size_t i = 0; i < str.length(); i++) {
@@ -124,6 +124,10 @@ ostream & operator<< (ostream & os, const ulmtint & src) {
 		os << 0;
 	}
 
+	if (src.sgn_) {
+		os << '-';
+	}
+
 	list<char> copy;
 	typename list<char>::const_iterator itr = src.data_.begin();
 	typename list<char>::const_iterator itre = src.data_.end();
@@ -147,12 +151,8 @@ ostream & operator<< (ostream & os, const ulmtint & src) {
 ulmtint operator+ (const ulmtint & oa, const ulmtint & ob) {
 	ulmtint ret;
 
-	/**/cout << DEBUG << oa << '\t' << ob << endl;
-
 	const ulmtint & a = ret.absmt(oa, ob) ? oa: ob;
 	const ulmtint & b = ret.absmt(oa, ob) ? ob: oa;
-
-	/**/cout << DEBUG << a << '\t' << b << endl;
 
 	list<char> & sum = ret.data_;
 	const list<char> & na = a.data_;
@@ -209,10 +209,14 @@ ulmtint operator+ (const ulmtint & oa, const ulmtint & ob) {
 			throw "Uncaught Error";
 		}
 
+		typename list<char>::const_iterator rete = ret.data_.end();
+
+		/**/cout << DEBUG << unsigned(*rete) << endl;
+		// while (*ret.data_.end() == 0) {
+		// 	ret.data_.pop_back();
+		// }
 	} else {
 		// +
-
-		/**/cout << DEBUG << a << "\t+\t" << b << endl;
 
 		ret.sgn_ = a.sgn_;
 		do {
