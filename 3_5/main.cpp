@@ -9,7 +9,6 @@
     ```
     The most primitive algorithm.
 ************************************************************/
-
 #include <iostream>
 #include <fstream>
 #include <stack>
@@ -17,9 +16,24 @@
 
 using namespace std;
 
-enum key {BEGIN, END, IF, THEN, ELSE};
+const string DEBUG = "DEBUG\t";
+
+enum key {BEGIN, IF, THEN, ELSE, END};
+bool check (string filename);
 
 class FILE_OPEN_FAILED {};
+
+int main() {
+	if (check("Dijkstra.pas")) {
+		cout << "Matching succeed" << endl;
+	} else {
+		cout << "Matching failed" << endl;
+	}
+
+	return 0;
+}
+
+/***********************************************************/
 
 bool check (string filename) {
 	ifstream reader(filename.c_str());
@@ -40,14 +54,36 @@ bool check (string filename) {
 		} else if (word == "else") {
 			pool.push(ELSE);
 		} else if (word == "end;" || word == "end.") {
-			
-		}
 
+			while (!pool.empty() && pool.top() != BEGIN) {
+				key cur = pool.top();
+				if (cur == ELSE) {
+					pool.pop();
+					if (pool.top() == THEN) {
+						continue;
+					} else {
+						return false;
+					}
+				} else if (pool.top() == THEN) {
+					pool.pop();
+					if (pool.top() == IF) {
+						pool.pop();
+					} else {
+						return false;
+					}
+				} else {
+					return false;
+				}
+			}
+
+			if (pool.empty()) {
+				return false;
+			} else {
+				pool.pop();
+			}
+
+		}
 	}
 
-	return true;
-}
-
-int main() {
-	return 0;
+	return pool.empty();
 }
