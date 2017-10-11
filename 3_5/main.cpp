@@ -1,13 +1,13 @@
 /************************************************************
-  # Pascal :inter
+  # Pascal linter
   	  begin ... end
 	  if ... then ... (else ...
 
   ## Function
     ```
-    int Ackerman(int m, int n);
+	bool check (string filename);
     ```
-    The most primitive algorithm.
+    docs in readme.md
 ************************************************************/
 #include <iostream>
 #include <fstream>
@@ -24,10 +24,15 @@ bool check (string filename);
 class FILE_OPEN_FAILED {};
 
 int main() {
-	if (check("Dijkstra.pas")) {
-		cout << "Matching succeed" << endl;
-	} else {
-		cout << "Matching failed" << endl;
+	string filename = "Dijkstra.pas";
+	try {
+		if (check(filename)) {
+			cout << "Matching succeed" << endl;
+		} else {
+			cout << "Matching failed" << endl;
+		}
+	} catch (FILE_OPEN_FAILED) {
+		cout << "Cannot open the file "<< filename << endl;
 	}
 
 	return 0;
@@ -40,9 +45,9 @@ bool check (string filename) {
 	if(!reader) {
 		throw FILE_OPEN_FAILED();
 	}
+	string word;
 
 	stack<key> pool;
-	string word;
 
 	while (reader >> word) {
 		if (word == "begin") {
