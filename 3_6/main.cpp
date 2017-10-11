@@ -1,5 +1,5 @@
 /************************************************************
-  * Ackermann Function
+  # Ackermann Function
     A(m, n) =
       n + 1             when m = 0
       A(m-1, 1)         when m != 0, n = 0
@@ -7,13 +7,13 @@
 
   ********** Alogrithm with recursions **********
 
-  ** Function
+  ## Function
     ```
     int Ackerman(int m, int n);
     ```
     The most primitive algorithm.
 
-  ** Function
+  ## Function
     ```
     int Ackerman_opt(int m, int n);
     ```
@@ -49,13 +49,13 @@
 
   ********** Alogrithm without recursions **********
 
-  ** Struct
+  ## Struct
     ```
     struct arg { int m, n; };
     ```
     Define a structure with m and n which acts as elemType of the stack. In this way, I avoid operating two stacks with the same operation at the same time.
 
-  ** Function
+  ## Function
     ```
     int Ackerman_stack(int m, int n);
     ```
@@ -100,7 +100,7 @@ int main()
     cout << "m" << '\t' << "n" << '\t' << "opt" << '\t' << "stack" << endl;
     for (int i = 0; i <= 3; i++) {
         for (int j = 0; j <= 4; j++) {
-            printAck(i, j)
+            printAck(i, j);
         }
     }
     printAck(4, 0);

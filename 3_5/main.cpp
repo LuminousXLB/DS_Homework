@@ -1,9 +1,9 @@
 /************************************************************
-  * Pascal :inter
+  # Pascal :inter
   	  begin ... end
 	  if ... then ... (else ...
 
-  ** Function
+  ## Function
     ```
     int Ackerman(int m, int n);
     ```
@@ -17,52 +17,35 @@
 
 using namespace std;
 
-enum sep {BEGIN, END};
-enum ctrl {IF, THEN, ELSE};
-struct stat {
-	bool BEGIN_END = true, IF_THEN_ELSE = true;
-};
+enum key {BEGIN, END, IF, THEN, ELSE};
+
 class FILE_OPEN_FAILED {};
 
-stat check (string filename) {
+bool check (string filename) {
 	ifstream reader(filename.c_str());
 	if(!reader) {
 		throw FILE_OPEN_FAILED();
 	}
 
-	stack<sep> separator;
-	stack<ctrl> proctrl;
-	stat ret;
+	stack<key> pool;
 	string word;
+
 	while (reader >> word) {
 		if (word == "begin") {
-			separator.push(BEGIN);
-		} else if (word == "end" && ret.BEGIN_END) {
-			if (separator.empty()) {
-				ret.BEGIN_END = false;
-			} else {
-				separator.pop();
-			}
+			pool.push(BEGIN);
 		} else if (word == "if") {
-			if (!proctrl.empty() && proctrl.top() == THEN) {
-				proctrl.pop();
-			}
-			proctrl.push(IF);
-		} else if (word == "then" && ret.IF_THEN_ELSE) {
-			if (proctrl.empty() || proctrl.top() == THEN) {
-				ret.IF_THEN_ELSE = false;
-			} else {
-				proctrl.pop();
-				proctrl.push(THEN);
-			}
+			pool.push(IF);
+		} else if (word == "then") {
+			pool.push(THEN);
+		} else if (word == "else") {
+			pool.push(ELSE);
+		} else if (word == "end;" || word == "end.") {
+			
 		}
 
-		if (!ret.BEGIN_END && !ret.IF_THEN_ELSE) {
-			break;
-		}
 	}
 
-	return ret;
+	return true;
 }
 
 int main() {
