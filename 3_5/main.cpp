@@ -1,14 +1,7 @@
 /************************************************************
-  # Pascal linter
-  	  begin ... end
-	  if ... then ... (else ...
-
-  ## Function
-    ```
-	bool check (string filename);
-    ```
     docs in readme.md
 ************************************************************/
+
 #include <iostream>
 #include <fstream>
 #include <stack>
@@ -16,12 +9,12 @@
 
 using namespace std;
 
-const string DEBUG = "DEBUG\t";
-
 enum key {BEGIN, IF, THEN, ELSE, END};
 bool check (string filename);
 
 class FILE_OPEN_FAILED {};
+
+/***********************************************************/
 
 int main() {
 	string filename = "Dijkstra.pas";
