@@ -48,7 +48,7 @@ using namespace std;
 int main() {
     cout << "Hello world!" << endl;
     TextEditor editor;
-    editor.open("css.in");
+    // editor.open("package.json");
 
     string cmd;
     while (cin >> cmd) {
@@ -96,8 +96,10 @@ int main() {
             } catch (FileOpenFailed) {
                 cerr << "ERROR\tCannot open the file" << endl;
             }
-        } else {
-            cerr << "ERROR\t Wrong command.";
+        } else if (cmd == "exit") {
+			return 0;
+		} else {
+            cerr << "ERROR\t Wrong command." << endl;
         }
         cout << "************************************************************" << endl;
     }

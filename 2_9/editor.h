@@ -5,17 +5,19 @@
 #include <list>
 #include <string>
 #include <fstream>
-
 #endif
 
 using namespace std;
+
+/***********************************************************/
+// DEFINITION
+/***********************************************************/
 
 class FileOpenFailed {};
 class InvalidRange {};
 
 const bool Start_With_Zero = false;
-const bool Del_Beyond_Line = true;
-const size_t _col_ = 20;
+const size_t _col_ = 2000;
 
 class TextEditor {
 private:
@@ -47,6 +49,9 @@ public:
 	}
 };
 
+/***********************************************************/
+// IMPLEMENTATION
+/***********************************************************/
 
 void TextEditor::print(ostream & os) {
 	typename list<string>::const_iterator itr = text_.begin();
@@ -86,8 +91,8 @@ void TextEditor::open(const string filename) {
 
 void TextEditor::quit() {
 	ofstream writer;
-	string fn = filename_ + ".out";
-	writer.open(fn.c_str());
+	// string fn = filename_ + ".out";
+	writer.open(filename_.c_str());
 	if(!writer) {
 		throw FileOpenFailed();
 	}
@@ -123,52 +128,13 @@ void TextEditor::del(size_t line, size_t col, const size_t len) {
 	col = standardlize(col);
 	if (!validate(line)) {
 		throw InvalidRange();
-	} else if (col > _col_) {
-		line += col / _col_;
-		col %= _col_;
-		if (!validate(line)) {
-			throw InvalidRange();
-		}
 	}
 
 	typename list<string>::iterator itrb, itr = text_.begin();
 	for (size_t i = 0; i < line; ++i, ++itr);
 	itrb = itr;
 
-	if (Del_Beyond_Line) {
-		size_t cnt = itr -> length();
-		itr -> erase(col, len);
-		cnt -= itr -> length();
-		while (cnt < len) {
-			++itr;
-			cnt += itr -> length();
-			itr -> erase(col, len - cnt);
-			cnt -= itr -> length();
-		}
-	} else {
-		itr -> erase(col, len);
-	}
-	// organize
-	while (itrb -> length() <= _col_) {
-		if (itrb -> empty()) {
-			text_.erase(itrb);
-		} else {
-			itr = itrb;
-			++itr;
-			*itrb += *itr;
-			*itr = itrb -> substr(_col_ + 1);
-			itrb -> erase(_col_ + 1);
-			cerr << itrb -> length() << endl;
-			cerr << _col_ << endl;
-			if (itrb -> length() == _col_ + 1) {
-				++itrb;
-			} else if (itr -> empty()) {
-				text_.erase(itrb);
-			} else {
-				throw "Uncaught condition";
-			}
-		}
-	}
+	itr -> erase(col, len);
 }
 
 void TextEditor::ins(size_t line, size_t col, const string istr) {
@@ -176,12 +142,6 @@ void TextEditor::ins(size_t line, size_t col, const string istr) {
 	col = standardlize(col);
 	if (!validate(line)) {
 		throw InvalidRange();
-	} else if (col > _col_) {
-		line += col / _col_;
-		col %= _col_;
-		if (!validate(line)) {
-			throw InvalidRange();
-		}
 	}
 
 	typename list<string>::iterator itrb, itr = text_.begin();
@@ -190,15 +150,4 @@ void TextEditor::ins(size_t line, size_t col, const string istr) {
 	for (size_t i = 0; i < line; ++i, ++itr);
 	itrb = itr;
 	itr -> insert(col, istr);
-
-	while (itrb -> length() > _col_) {
-		itr = itrb;
-		if (itr == itre) {
-			text_.push_back("");
-		}
-		++itr;
-		*itr = itrb -> substr(_col_ + 1) + *itr;
-		itrb -> erase(_col_ + 1);
-		++itrb;
-	}
 }
