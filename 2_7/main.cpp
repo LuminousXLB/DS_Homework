@@ -59,5 +59,5 @@ int main() {
 }
 
 int generateLength () {
-    return rand % 20 + 5 ;
+    return rand() % 20 + 5 ;
 }
