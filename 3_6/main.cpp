@@ -76,6 +76,8 @@
 
 using namespace std;
 
+const char DEBUG[] = "DEBUG\t";
+
 int Ackerman(int m, int n);
 int Ackerman_opt(int m, int n);
 
@@ -83,8 +85,7 @@ struct arg {
     int m, n;
 };
 
-const int SIZE = 10000;
-int data[SIZE][SIZE] = {0};
+int data[100][1000000] = {0};
 stack<arg> cache;
 
 int getData(int m, int n);
@@ -92,7 +93,7 @@ int Ackerman_stack(int m, int n);
 
 
 void printAck(int m, int n) {
-    cout << m << '\t' << n << '\t' << Ackerman(m, n) << '\t' << Ackerman_stack(m, n) << endl;
+    cout << m << '\t' << n << '\t' << Ackerman_opt(m, n) << '\t' << Ackerman_stack(m, n) << endl;
 }
 
 int main()
@@ -126,9 +127,6 @@ int Ackerman_opt(int m, int n) {
         return 2*n + 3;
     } else if (m == 3 && n >= 1) {
         return pow(2, n + 3) - 3;
-    } else if (m == 4 && n >= 1) {
-        // 2^[A(4, n-1) + 3] - 3
-        return pow(2, Ackerman_opt(4, n - 1)) - 3;
     }
 
     if (m == 0) {
@@ -157,9 +155,12 @@ int Ackerman_stack(int m, int n) {
     arg enter = {m, n};
     cache.push(enter);
 
+
     while (!cache.empty()) {
         arg cur = cache.top();
         int m = cur.m, n = cur.n;
+
+		// cout<<"DEBUG\t" << m <<'\t'<< n << "\tSTACK_SIZE\t" << cache.size() << endl;
 
         if (data[m][n]) {
             cache.pop();

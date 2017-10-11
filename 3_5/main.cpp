@@ -9,6 +9,10 @@
 
 using namespace std;
 
+// const string DEBUG = "DEBUG\t";
+
+/***********************************************************/
+
 enum key {BEGIN, IF, THEN, ELSE, END};
 bool check (string filename);
 
@@ -34,14 +38,17 @@ int main() {
 /***********************************************************/
 
 bool check (string filename) {
+	// FILE READER
 	ifstream reader(filename.c_str());
 	if(!reader) {
 		throw FILE_OPEN_FAILED();
 	}
 	string word;
 
+	// CONTAINER
 	stack<key> pool;
 
+	// READ
 	while (reader >> word) {
 		if (word == "begin") {
 			pool.push(BEGIN);
@@ -52,13 +59,14 @@ bool check (string filename) {
 		} else if (word == "else") {
 			pool.push(ELSE);
 		} else if (word == "end;" || word == "end.") {
-
+			// PROCESSING
 			while (!pool.empty() && pool.top() != BEGIN) {
 				key cur = pool.top();
 				if (cur == ELSE) {
 					pool.pop();
 					if (pool.top() == THEN) {
 						continue;
+						// continue to check if THEN is valid
 					} else {
 						return false;
 					}
@@ -73,15 +81,15 @@ bool check (string filename) {
 					return false;
 				}
 			}
-
+			// if pool is not empty, BEGIN should be the next one.
 			if (pool.empty()) {
 				return false;
 			} else {
 				pool.pop();
 			}
-
 		}
 	}
 
+	// RETURN
 	return pool.empty();
 }

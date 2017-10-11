@@ -21,7 +21,7 @@ int generateLength ();
 
 int main() {
 
-//  Generate 2 seqList
+//  Generate seqList A
 
     srand(time(NULL));
 
@@ -35,6 +35,8 @@ int main() {
     cout << "listA\t"<< listA.length();
     listA.traverse();
 	cout << endl << endl;
+
+//  Generate seqList B
 
     int lenB = generateLength();
     for (int i = 0; i < lenB; ++i) {

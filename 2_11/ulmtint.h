@@ -7,10 +7,14 @@
 
 using namespace std;
 
+// const string DEBUG = "DEBUG\t";
+
+/***********************************************************/
+// DECLARATION
+/***********************************************************/
+
 class InvalidNumberString {};
 class ulmtint;
-
-const string DEBUG = "DEBUG\t";
 
 istream & operator>> (istream & is, ulmtint & dest);
 ostream & operator<< (ostream & os, const ulmtint & src);
@@ -31,7 +35,13 @@ public:
 	ulmtint & operator= (const ulmtint & src);
 };
 
+/***********************************************************/
+// IMPLEMENTATION
+/***********************************************************/
+
 bool ulmtint::absmt(const ulmtint & a, const ulmtint & b) {
+	// compare abs of a & b
+	// if abs(a) > abs(b) return true
 	const list<char> & na = a.data_;
 	const list<char> & nb = b.data_;
 
@@ -57,8 +67,8 @@ bool ulmtint::absmt(const ulmtint & a, const ulmtint & b) {
 	return false;
 }
 
-
 ulmtint::ulmtint(int num) {
+	// constructor
 	if (num < 0) {
 		sgn_ = 1;
 		num = -num;
@@ -72,6 +82,7 @@ ulmtint::ulmtint(int num) {
 }
 
 ulmtint::ulmtint(string str) {
+	// constructor
 	sgn_ = str[0] == '-' ? 1: 0;
 	size_t i = sgn_;
 
@@ -91,15 +102,16 @@ ulmtint & ulmtint::operator= (const ulmtint & src) {
 	return *this;
 }
 
-
 istream & operator>> (istream & is, ulmtint & dest) {
 	dest.data_.clear();
-
 	char tmp;
+
+	// Skip the space character
 	do {
 		tmp = is.get();
 	} while (isspace(tmp));
 
+	// Get tht first char and check the symbol.
 	if (tmp == '-') {
 		dest.sgn_ = 1;
 		tmp = is.get();
@@ -107,10 +119,12 @@ istream & operator>> (istream & is, ulmtint & dest) {
 		dest.sgn_ = 0;
 	}
 
+	// Skip 0s at the beginning
 	while(tmp == '0') {
 		tmp = is.get();
 	}
 
+	// read until non-numerate character
 	while(tmp >= '0' && tmp <= '9') {
 		dest.data_.push_front(tmp - '0');
 		tmp = is.get();
@@ -122,22 +136,28 @@ istream & operator>> (istream & is, ulmtint & dest) {
 ostream & operator<< (ostream & os, const ulmtint & src) {
 	// 其实list是个双链表，直接itr从end往回输出就好了，但是题里要求是单链表就很尴尬
 	if (!src.data_.size()) {
+		// if size == 0, os << 0;
 		os << 0;
+		return os;
 	}
 
 	if (src.sgn_) {
+		// print symbol
 		os << '-';
 	}
 
+	// define temporary container & iterator
 	list<char> copy;
 	typename list<char>::const_iterator itr = src.data_.begin();
 	typename list<char>::const_iterator itre = src.data_.end();
 
+	// reverse the list
 	do {
 		copy.push_front(*itr + '0');
 		++itr;
 	} while (itr != itre);
 
+	// print the list
 	itr = copy.begin();
 	itre = copy.end();
 
@@ -152,31 +172,33 @@ ostream & operator<< (ostream & os, const ulmtint & src) {
 ulmtint operator+ (const ulmtint & oa, const ulmtint & ob) {
 	ulmtint ret;
 
+	// if one of the operands is 0, return the other one
+	if (!oa.data_.size()) {
+		return oa;
+	} else if (!ob.data_.size()) {
+		return ob;
+	}
+
+	// compare the abs, let the larger one be a
 	const ulmtint & a = ret.absmt(oa, ob) ? oa: ob;
 	const ulmtint & b = ret.absmt(oa, ob) ? ob: oa;
 
+	//  define refereneces for covenience
 	list<char> & sum = ret.data_;
-	const list<char> & na = a.data_;
-	const list<char> & nb = b.data_;
 
-	if (!na.size()) {
-		return b;
-	} else if (!nb.size()) {
-		return a;
-	}
-
-	short int flag = a.sgn_ + b.sgn_;
-	short int digit = 0, carry = 0;
-
+	// define iterator
 	typename list<char>::const_iterator aitr = a.data_.begin();
 	typename list<char>::const_iterator aitre = a.data_.end();
 	typename list<char>::const_iterator bitr = b.data_.begin();
 	typename list<char>::const_iterator bitre = b.data_.end();
 
-	if (flag == 1) {
-		// -
-		/**/cout << DEBUG << a << "\t-\t" << b << endl;
+	// initilize temporary variables
+	short int digit = 0, carry = 0;
 
+	// choose from add and subtract
+	short int flag = a.sgn_ + b.sgn_;
+	if (flag == 1) {
+		// subtraction
 		do {
 			digit = *aitr - *bitr + carry;
 			carry = 0;
@@ -209,31 +231,15 @@ ulmtint operator+ (const ulmtint & oa, const ulmtint & ob) {
 			throw "Uncaught Error";
 		}
 
-
-		// typename list<char>::const_iterator rete = ret.data_.end();
-
-
 		typename list<char>::const_iterator back = ret.data_.end();
 		--back;
-		while (*back == 0) {
+		while (*back == 0 && ret.data_.size()) {
 			ret.data_.pop_back();
 			back = ret.data_.end();
 			--back;
 		}
-
-
-		// cout << DEBUG <<  << endl;
-		// if (true) {
-		// 	typename list<char>::const_iterator itr = ret.data_.begin();
-		// 	typename list<char>::const_iterator itre = ret.data_.end();
-		// 	--itre;
-		// 	while (itr != itre) {
-		// 		cout << DEBUG << unsigned(*itr) << endl;
-		// 		++itr;
-		// 	}
-		// }
 	} else {
-		// +
+		// addition
 		ret.sgn_ = a.sgn_;
 		do {
 			digit = *aitr + *bitr + carry;
