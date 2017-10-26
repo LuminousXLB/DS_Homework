@@ -9,3 +9,4 @@
 *.win
 *.exe
 *_private.h
+*.json
