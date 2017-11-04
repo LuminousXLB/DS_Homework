@@ -1,25 +1,25 @@
 /************************************************************
-  * Source Code 2-2  Sequence List
-
-  ** Bug
-    ```
-    int seqList<elemType>::search(const elemType &x) const
-    ```
-    i is undefined after the loop
-
-  ** Feature
-    ```
-    void seqList<elemType>::traverse() const
-    ```
-    give a tab after each element
-
-  ** Feature:
-    ```
-    template <class elemType>
-    seqList<elemType> operator+(const seqList<elemType> &listA, const seqList<elemType> &listB)
-    ```
-    merge listA & listB
-
+* Source Code 2-2  Sequence List
+*
+** Bug
+**  ```
+**  int seqList<elemType>::search(const elemType &x) const
+**  ```
+**  i is undefined after the loop
+**
+** Feature
+**  ```
+**  void seqList<elemType>::traverse() const
+**  ```
+**  give a tab after each element
+**
+** Feature:
+**  ```
+**  template <class elemType>
+**  seqList<elemType> operator+(const seqList<elemType> &listA, const seqList<elemType> &listB)
+**  ```
+**  merge listA & listB
+**
 ************************************************************/
 
 #include "list.h"
@@ -33,18 +33,18 @@ template <class elemType>
 class seqList;
 
 template <class elemType>
-seqList<elemType> operator+(const seqList<elemType> &listA, const seqList<elemType> &listB);
+seqList<elemType> operator+(const seqList<elemType>& listA, const seqList<elemType>& listB);
 
 template <class elemType>
-class seqList : public list<elemType> {
-	friend seqList<elemType> operator+ <> (const seqList<elemType> &listA, const seqList<elemType> &listB);
-  private:
+class seqList: public list<elemType> {
+    friend seqList<elemType> operator+<> (const seqList<elemType> &listA, const seqList<elemType> &listB);
+private:
     elemType *data;
     int currentLength;
     int maxSize;
     void doubleSpace();
 
-  public:
+public:
     seqList(int initSize = 10);
     ~seqList() {
         delete[] data;
@@ -55,9 +55,9 @@ class seqList : public list<elemType> {
     int length() const {
         return currentLength;
     }
-    void insert(int i, const elemType &x);
+    void insert(int i, const elemType& x);
     void remove(int i);
-    int search(const elemType &x) const;
+    int search(const elemType& x) const;
     elemType visit(int i) const;
     void traverse() const;
 };
@@ -65,6 +65,7 @@ class seqList : public list<elemType> {
 template <class elemType>
 void seqList<elemType>::doubleSpace() {
     elemType *tmp = data;
+
     maxSize *= 2;
     data = new elemType[maxSize];
 
@@ -73,6 +74,7 @@ void seqList<elemType>::doubleSpace() {
     }
     delete[] tmp;
 }
+
 
 template <class elemType>
 seqList<elemType>::seqList(int initSize) {
@@ -84,9 +86,10 @@ seqList<elemType>::seqList(int initSize) {
     currentLength = 0;
 }
 
+
 template <class elemType>
-void seqList<elemType>::insert(int i, const elemType &x) {
-    if (i < 0 || i > currentLength) {
+void seqList<elemType>::insert(int i, const elemType& x) {
+    if ((i < 0) || (i > currentLength)) {
         throw OutOfBound();
     }
     if (currentLength == maxSize) {
@@ -99,9 +102,10 @@ void seqList<elemType>::insert(int i, const elemType &x) {
     ++currentLength;
 }
 
+
 template <class elemType>
 void seqList<elemType>::remove(int i) {
-    if (i < 0 || i > currentLength - 1) {
+    if ((i < 0) || (i > currentLength - 1)) {
         throw OutOfBound();
     }
     for (int j = i; j < currentLength - 1; j++) {
@@ -110,8 +114,9 @@ void seqList<elemType>::remove(int i) {
     --currentLength;
 }
 
+
 template <class elemType>
-int seqList<elemType>::search(const elemType &x) const {
+int seqList<elemType>::search(const elemType& x) const {
     for (int i = 0; i < currentLength; ++i) {
         if (data[i] == x) {
             return i;
@@ -120,13 +125,15 @@ int seqList<elemType>::search(const elemType &x) const {
     return -1;
 }
 
+
 template <class elemType>
 elemType seqList<elemType>::visit(int i) const {
-    if (i < 0 || i > currentLength - 1) {
+    if ((i < 0) || (i > currentLength - 1)) {
         throw OutOfBound();
     }
     return data[i];
 }
+
 
 template <class elemType>
 void seqList<elemType>::traverse() const {
@@ -136,19 +143,20 @@ void seqList<elemType>::traverse() const {
     }
 }
 
+
 template <class elemType>
-seqList<elemType> operator+(const seqList<elemType> &listA, const seqList<elemType> &listB) {
-	// Initialize a new seqList whose maxLength is the sum of the length of listA & listB
-	seqList<elemType> merge(listA.length() + listB.length() + 1);
+seqList<elemType> operator+(const seqList<elemType>& listA, const seqList<elemType>& listB) {
+    // Initialize a new seqList whose maxLength is the sum of the length of listA & listB
+    seqList<elemType> merge(listA.length() + listB.length() + 1);
 
     int i, j;
 
-	// copy the data of listA to merge
+    // copy the data of listA to merge
     for (i = 0; i < listA.length(); ++i) {
         merge.insert(i, listA.visit(i));
     }
 
-	// copy the data of listB to merge following that of listA
+    // copy the data of listB to merge following that of listA
     for (j = 0; j < listB.length(); ++j) {
         merge.insert(i + j, listB.visit(j));
     }
