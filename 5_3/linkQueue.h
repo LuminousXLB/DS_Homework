@@ -1,3 +1,5 @@
+#include "queue.h"
+
 template <class elemType>
 class linkQueue: public queue<elemType> {
 private:
@@ -8,7 +10,6 @@ private:
             data = x;
             next = N;
         }
-
         node(): next(NULL) {}
         ~node() {}
     };
@@ -17,13 +18,11 @@ public:
     linkQueue() {
         front = rear = NULL;
     }
-
     ~linkQueue();
     bool isEmpty() {
         return front == NULL;
         //注意队空条件
     }
-
     void enQueue(const elemType& x);
     elemType deQueue();
 
@@ -67,10 +66,10 @@ elemType linkQueue<elemType>::deQueue() {
 
     front = front->next;
     if (front == NULL) {
+        //front==NULL说明队已空
         rear = NULL;
     }
 
-    //front==NULL说明队已空
     delete p;
     return value;
 }
