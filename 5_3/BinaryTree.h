@@ -85,6 +85,7 @@ public:
             midOrder(root);
         }
     }
+    void HierarchicalTraversal();
     void createTree(Type flag);
 
 private:
@@ -150,27 +151,38 @@ void BinaryTree<Type>::createTree(Type flag) {
     linkQueue<Node *> que;
     Node *tmp;
     Type x, ldata, rdata;
-    //创建树，输入flag表示空，ldata和rdate分别保存输入的左右孩子值
     cout << "\nEnter the root node: ";
     cin >> x;
-    root = new Node(x);                  //创建根节点
-    que.enQueue(root);                   //根节点入队
+    root = new Node(x);
+    que.enQueue(root);
     while (!que.isEmpty()) {
-        tmp = que.deQueue();             //tmp指向出队节点，为新节点的父亲
+        tmp = que.deQueue();
         cout << "\nEnter the 2 sons' of " << tmp->data << ", (" << flag << " as NULL): ";
-        cin >> ldata >> rdata;//外部输入的左右儿子
+        cin >> ldata >> rdata;
         if (ldata != flag) {
-            //若左儿子非@, 则为出队节点创建左儿子
             que.enQueue(tmp->left = new Node(ldata));
-            //入队新节点，为后续的创建做准备
         }
         if (rdata != flag) {
-            //若右儿子非@, 则为出队节点创建右儿子
             que.enQueue(tmp->right = new Node(rdata));
-            //新节点入队
         }
     }
-    //创建过程暗含了先生成左子树后生成右子树的顺序
     cout << "create completed!\n";
-    //注意此处链接指向的复杂性
+}
+
+
+template <class Type>
+void BinaryTree<Type>::HierarchicalTraversal() {
+    linkQueue<Node *> que;
+    que.enQueue(root);
+    cout << "\nHierarchicalTraversal\t";
+    while (!que.isEmpty()) {
+        Node *cursor = que.deQueue();
+        cout << cursor->data << ' ';
+        if (cursor->left) {
+            que.enQueue(cursor->left);
+        }
+        if (cursor->right) {
+            que.enQueue(cursor->right);
+        }
+    }
 }

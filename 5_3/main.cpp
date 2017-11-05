@@ -13,6 +13,7 @@ int main(int argc, char const *argv[]) {
     bt.preOrder();
     bt.postOrder();
     bt.midOrder();
+    bt.HierarchicalTraversal();
 
     cout << endl;
 
