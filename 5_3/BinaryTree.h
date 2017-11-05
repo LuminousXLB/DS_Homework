@@ -69,19 +69,19 @@ public:
     }
     void preOrder() const {
         if (root != NULL) {
-            cout << "\n前序遍历：";
+            cout << "\npreOrder\t";
             preOrder(root);
         }
     }
     void postOrder() const {
         if (root != NULL) {
-            cout << "\n后序遍历：";
+            cout << "\npostOrder\t";
             postOrder(root);
         }
     }
     void midOrder() const {
         if (root != NULL) {
-            cout << "\n中序遍历：";
+            cout << "\nmidOrder\t";
             midOrder(root);
         }
     }
@@ -151,14 +151,14 @@ void BinaryTree<Type>::createTree(Type flag) {
     Node *tmp;
     Type x, ldata, rdata;
     //创建树，输入flag表示空，ldata和rdate分别保存输入的左右孩子值
-    cout << "\n输入根结点: ";
+    cout << "\nEnter the root node: ";
     cin >> x;
     root = new Node(x);                  //创建根节点
     que.enQueue(root);                   //根节点入队
     while (!que.isEmpty()) {
         tmp = que.deQueue();             //tmp指向出队节点，为新节点的父亲
-        cout << "\n输入" << tmp->data << "的两个儿子(" << flag << "表示空结点): ";
-        cin >> ldata >> rdata;                                          //外部输入的左右儿子
+        cout << "\nEnter the 2 sons' of " << tmp->data << ", (" << flag << " as NULL): ";
+        cin >> ldata >> rdata;//外部输入的左右儿子
         if (ldata != flag) {
             //若左儿子非@, 则为出队节点创建左儿子
             que.enQueue(tmp->left = new Node(ldata));

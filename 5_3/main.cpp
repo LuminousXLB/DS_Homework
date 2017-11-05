@@ -4,8 +4,17 @@
 using namespace std;
 
 int main(int argc, char const *argv[]) {
-    /* code */
-    BinaryTree<int> bt(2);
+    freopen("data.in", "r", stdin);
+
+    BinaryTree<int> bt;
+
+    bt.createTree(0);
+
+    bt.preOrder();
+    bt.postOrder();
+    bt.midOrder();
+
+    cout << endl;
 
     return 0;
 }
