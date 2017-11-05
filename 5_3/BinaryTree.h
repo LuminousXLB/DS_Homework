@@ -172,17 +172,17 @@ void BinaryTree<Type>::createTree(Type flag) {
 
 template <class Type>
 void BinaryTree<Type>::HierarchicalTraversal() {
-    linkQueue<Node *> que;
-    que.enQueue(root);
+    linkQueue<Node *> que;  // 初始化一个队列
+    que.enQueue(root);      // 根节点入队
     cout << "\nHierarchicalTraversal\t";
     while (!que.isEmpty()) {
-        Node *cursor = que.deQueue();
-        cout << cursor->data << ' ';
+        Node *cursor = que.deQueue();   // 出队一个节点
+        cout << cursor->data << ' ';    // 先输出本节点的值
         if (cursor->left) {
-            que.enQueue(cursor->left);
+            que.enQueue(cursor->left);  // 再将本节点的左孩子入队
         }
         if (cursor->right) {
-            que.enQueue(cursor->right);
+            que.enQueue(cursor->right); // 最后将本节点的右孩子入队
         }
     }
 }
