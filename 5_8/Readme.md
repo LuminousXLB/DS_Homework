@@ -22,7 +22,7 @@
 
 ```cpp
 template <class Type>
-void BinaryTree<Type>::HierarchicalTraversal() const {
+void BinaryTree<Type>::HierarchicalTraversal() {
     linkQueue<Node *> que;  // 初始化一个队列
     que.enQueue(root);      // 根节点入队
     cout << "\nHierarchicalTraversal\t";
@@ -113,3 +113,4 @@ gcc version 6.3.0 (MinGW.org GCC-6.3.0-1)
 ```bash
 g++ -Wall
 ```
+
