@@ -18,9 +18,10 @@ void tree::createTree(elemType flag) {
     Type x, ldata, rdata;
 
     cout << "\nEnter the root node: ";
-    cin >> d;
-    cout << "\nEnter the children of the root node, (" << flag << " as NULL):";
+    cin >> x;
     root = new Node(x);
+    cout << "\nEnter the children of the root node, (" << flag << " as NULL):";
+    while (cin >> x) {}
 }
 
 
