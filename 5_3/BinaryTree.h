@@ -1,4 +1,4 @@
-// 5-1
+#pragma once
 #include <iostream>
 #include "linkQueue.h"
 

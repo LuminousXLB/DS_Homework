@@ -170,7 +170,7 @@ void BinaryTree<Type>::createTree(Type flag) {
 }
 
 
-ttemplate<class Type>
+template <class Type>
 bool BinaryTree<Type>::isComplete() {
     int k = height();   // 获取二叉树的高度k
     int n = size();     // 获取二叉树的节点数n
