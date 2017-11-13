@@ -45,6 +45,7 @@ private:
 
 template <class T>
 mySet<T>& mySet<T>::operator=(const mySet& other) {
+    // Copy Constructor
     if (this != &other) {
         delete[] seq;
         scale = other.scale;
@@ -71,6 +72,7 @@ const T& mySet<T>::operator[](const int& index) const {
 
 template <class T>
 mySet<T>::mySet(T array[], int n) {
+    // 先排序，然后再去重
     InsertSort(array, n);
     scale = duplicateRemoval(array, n);
     seq = new T[scale];
@@ -98,6 +100,7 @@ mySet<T>::~mySet() {
 
 template <class T>
 void mySet<T>::InsertSort(T sort[], int n) {
+    // 插入排序算法
     T temp;
     int k, i;
 
@@ -113,6 +116,7 @@ void mySet<T>::InsertSort(T sort[], int n) {
 
 template <class T>
 int mySet<T>::duplicateRemoval(T seq[], int n) {
+    // 对一个已排序的数组去重算法
     int i = 1, step = 1;
 
     for (i = 1; i < n; i++) {
@@ -140,6 +144,7 @@ ostream& operator<<(ostream& os, const mySet<T>& pr) {
 
 template <class T>
 mySet<T> operator+(const mySet<T>& seq1, const mySet<T>& seq2) {
+    // 取并集，由于两个集合皆有序，可逐个比对，加入新的集合
     T *res = new T[max(seq1.scale, seq2.scale)];
     int i = 0, j = 0, k = 0;
 
@@ -160,6 +165,7 @@ mySet<T> operator+(const mySet<T>& seq1, const mySet<T>& seq2) {
 
 template <class T>
 mySet<T> operator*(const mySet<T>& seq1, const mySet<T>& seq2) {
+    // 取交集
     T *res = new T[seq1.scale + seq2.scale];
     int i = 0, j = 0, k = 0;
 
@@ -188,6 +194,7 @@ mySet<T> operator*(const mySet<T>& seq1, const mySet<T>& seq2) {
 
 template <class T>
 mySet<T> operator-(const mySet<T>& seq1, const mySet<T>& seq2) {
+    // 取差集
     T *res = new T[max(seq1.scale, seq2.scale)];
     int i = 0, j = 0, k = 0;
 

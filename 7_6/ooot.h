@@ -19,6 +19,7 @@ public:
         typename list<T>::const_iterator itre = data_.end();
         int index = 0;
         for (typename list<T>::const_iterator itr = data_.begin(); itr != itre; ++itr) {
+            // 若找到则放到表头，否则放到结尾
             if (*itr == elem) {
                 data_.push_front(elem);
                 data_.erase(itr);
