@@ -71,11 +71,11 @@ bool closeHashTable<Type>::remove(const Type& x) {
             return false;
         } else if (array[pos].data == x) {
             // 指定位置为x
-            if (array[pos].data == 1) {
+            if (array[pos].state == 1) {
                 // active, 预删除
                 array[pos].state = 2;
                 return true;
-            } else if (array[pos].data = 2) {
+            } else if (array[pos].state = 2) {
                 // deleted，删除失败
                 return false;
             }

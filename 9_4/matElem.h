@@ -3,6 +3,12 @@
 #include <cstdlib>
 
 template <class elemType>
+class matElem;
+
+template <class elemType>
+bool operator==(const matElem<elemType>&, const matElem<elemType>&);
+
+template <class elemType>
 class matElem {
     friend bool operator==<>(const matElem<elemType> &, const matElem<elemType> &);
 private:

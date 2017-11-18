@@ -36,7 +36,7 @@ int main(int argc, char const *argv[]) {
 
     // 初始化散列表
     int size = tableSize(_Matrix_Rows_, _Matrix_Columns_, _Matrix_Sparseness_, _Load_Factor_);
-    closeHashTable<matElem<int> > ht(size, matelem2key<int> );
+    closeHashTable<matElem<int>> ht(size, matelem2key);
 
     // 生成随机元素并加入散列表
     bool rec[_Matrix_Rows_][_Matrix_Columns_] = { false };  // 记录元素分布，以免重复
