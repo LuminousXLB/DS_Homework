@@ -15,11 +15,12 @@ private:
     unsigned row_, col_;
     elemType data_;
 public:
-    matElem(int i, int j, elemType data): row_(i), col_(j), data_(data) {}
-    int row() const {
+    matElem(unsigned i, unsigned j, elemType data): row_(i), col_(j), data_(data) {}
+    matElem() {}
+    unsigned row() const {
         return row_;
     }
-    int col() const {
+    unsigned col() const {
         return col_;
     }
     elemType& data() {

@@ -17,6 +17,9 @@ private:
     node *array;
     int size;
     int (*key)(const Type& x);
+    int probe(int pos, int i = 0) {
+        return (pos + 1) % size;
+    }
 public:
     closeHashTable(int length = 101, int (*f)(const Type &x) = hashTable<Type>::defaultKey);
     ~closeHashTable() {
@@ -46,15 +49,24 @@ bool closeHashTable<Type>::insert(const Type& x) {
         if (array[pos].state != 1) {
             array[pos].data = x;
             array[pos].state = 1;
+
+            cout << "[SUCCESS]"
+                 << "\t key = " << key(x)
+                 << "\t initPos = " << initPos
+                 << "\t pos = " << pos << endl;
+
             return true;
-        } else if ((array[pos].state == 1) && (array[pos].data == x)) {
+        } else if (array[pos].data == x) {
             return false;
+        } else {
+            conflict_cnt++;
+            cout << "[CONFLICT] #" << conflict_cnt
+                 << "\t key = " << key(x)
+                 << "\t initPos = " << initPos
+                 << "\t pos = " << pos;
+            pos = probe(pos);
+            cout << "\t nextpos = " << pos << endl;
         }
-        pos = (pos + 1) % size;
-        cout << "[CONFLICT] #" << conflict_cnt
-             << "\t key = " << key(x)
-             << "\t initPos = " << initPos
-             << "\t pos = " << pos << endl;
     } while (pos != initPos);
     return false;
 }
@@ -79,8 +91,9 @@ bool closeHashTable<Type>::remove(const Type& x) {
                 // deleted，删除失败
                 return false;
             }
+        } else {
+            pos = probe(pos);
         }
-        pos = (pos + 1) % size; //否则向前线性探测(已被非x占用或已删除)
     } while (pos != initPos);
     return false;
 }
@@ -97,7 +110,7 @@ bool closeHashTable<Type>::find(const Type& x) const {
         } else if ((array[pos].state == 1) && (array[pos].data == x)) {
             return true;
         }
-        pos = (pos + 1) % size;
+        pos = probe(pos);
     } while (pos != initPos);
     return false;
 }

@@ -38,18 +38,22 @@ int main(int argc, char const *argv[]) {
     int size = tableSize(_Matrix_Rows_, _Matrix_Columns_, _Matrix_Sparseness_, _Load_Factor_);
     closeHashTable<matElem<int>> ht(size, matelem2key);
 
+    cout << size << endl;
+
     // 生成随机元素并加入散列表
     bool rec[_Matrix_Rows_][_Matrix_Columns_] = { false };  // 记录元素分布，以免重复
     int count = _Matrix_Rows_ * _Matrix_Columns_ * _Matrix_Sparseness_;
 
+    cout << count << endl;
 
     for (int i = 0; i < count; ++i) {
         matElem<int> tmp = getRandom(_Matrix_Rows_, _Matrix_Columns_);
+        // cout << i << '\t' << rec[tmp.row()][tmp.col()] << endl;
         if (rec[tmp.row()][tmp.col()]) {
+            --i;
+        } else {
             ht.insert(tmp);
             rec[tmp.row()][tmp.col()] = true;
-        } else {
-            --i;
         }
     }
 
