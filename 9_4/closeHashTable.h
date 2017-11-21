@@ -17,18 +17,23 @@ private:
     node *array;
     int size;
     int (*key)(const Type& x);
-    int probe(int pos, int i = 0) {
-        return (pos + 1) % size;
+    int probe(int pos, int i = 0) const {
+        return (pos + 2 * i - 1) % size;
     }
 public:
     closeHashTable(int length = 101, int (*f)(const Type &x) = hashTable<Type>::defaultKey);
     ~closeHashTable() {
         delete [] array;
     }
-    bool find(const Type& x) const;
+    int getsize() const {
+        return size;
+    }
+    int find(const Type& x) const;
+
+    // bool find(const Type& x) const;
     bool insert(const Type& x);
     bool remove(const Type& x);
-    void rehash();
+    void rehash(int s = 0);
 };
 
 template <class Type>
@@ -42,30 +47,34 @@ closeHashTable<Type>::closeHashTable(int length, int (*f)(const Type &x)) {
 template <class Type>
 bool closeHashTable<Type>::insert(const Type& x) {
     int initPos, pos;
-    static int conflict_cnt = 0;        // 冲突计数器
+
+    // static int conflict_cnt = 0;        // 冲突计数器
+    // static int success_cnt = 0;
+    int cnt = 0;
 
     initPos = pos = key(x) % size;
     do {
         if (array[pos].state != 1) {
             array[pos].data = x;
             array[pos].state = 1;
-
-            cout << "[SUCCESS]"
-                 << "\t key = " << key(x)
-                 << "\t initPos = " << initPos
-                 << "\t pos = " << pos << endl;
+            // success_cnt++;
+            // cout << "[SUCCESS] #" << success_cnt
+            //      << "\t key = " << key(x)
+            //      << "\t initPos = " << initPos
+            //      << "\t pos = " << pos << endl;
 
             return true;
         } else if (array[pos].data == x) {
             return false;
         } else {
-            conflict_cnt++;
-            cout << "[CONFLICT] #" << conflict_cnt
-                 << "\t key = " << key(x)
-                 << "\t initPos = " << initPos
-                 << "\t pos = " << pos;
-            pos = probe(pos);
-            cout << "\t nextpos = " << pos << endl;
+            // conflict_cnt++;
+            // cout << "[CONFLICT] #" << conflict_cnt
+            //      << "\t key = " << key(x)
+            //      << "\t initPos = " << initPos
+            //      << "\t pos = " << pos;
+            cnt++;
+            pos = probe(pos, cnt);
+            // cout << "\t nextpos = " << pos << endl;
         }
     } while (pos != initPos);
     return false;
@@ -75,9 +84,11 @@ bool closeHashTable<Type>::insert(const Type& x) {
 template <class Type>
 bool closeHashTable<Type>::remove(const Type& x) {
     int initPos, pos;
+    int cnt = 0;
 
     initPos = pos = key(x) % size; //计算待删除元素的散列地址
     do {
+        cnt++;
         if (array[pos].state == 0) {
             //指定位置为空，失败
             return false;
@@ -92,34 +103,66 @@ bool closeHashTable<Type>::remove(const Type& x) {
                 return false;
             }
         } else {
-            pos = probe(pos);
+            pos = probe(pos, cnt);
         }
     } while (pos != initPos);
     return false;
 }
 
 
+// template <class Type>
+// bool closeHashTable<Type>::find(const Type& x) const {
+//     int initPos, pos;
+//     bool ret = false;
+//     static int cnt = 0;
+//
+//     initPos = pos = key(x) % size;
+//     do {
+//         cnt++;
+//         if (array[pos].state == 0) {
+//             ret = false;
+//             break;
+//         } else if ((array[pos].state == 1) && (array[pos].data == x)) {
+//             ret = true;
+//             break;
+//         }
+//         pos = probe(pos, cnt);
+//     } while (pos != initPos);
+//
+//     cout << cnt << endl;
+//     return ret;
+// }
 template <class Type>
-bool closeHashTable<Type>::find(const Type& x) const {
+int closeHashTable<Type>::find(const Type& x) const {
     int initPos, pos;
+    bool found = false;
+    int cnt = 0;
 
     initPos = pos = key(x) % size;
     do {
+        cnt++;
         if (array[pos].state == 0) {
-            return false;
+            found = false;
+            break;
         } else if ((array[pos].state == 1) && (array[pos].data == x)) {
-            return true;
+            found = true;
+            break;
         }
-        pos = probe(pos);
+        pos = probe(pos, cnt);
     } while (pos != initPos);
-    return false;
+
+    // cout << cnt << endl;
+    return cnt;
 }
 
 
 template <class Type>
-void closeHashTable<Type>::rehash() {
+void closeHashTable<Type>::rehash(int s) {
     node *tmp = array;
 
+    if (s) {
+        size = s;
+    }
     array = new node[size];
     for (int i = 0; i < size; ++i) {
         if (tmp[i].state == 1) {
