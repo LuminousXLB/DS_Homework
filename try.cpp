@@ -9,7 +9,30 @@ const size_t TravNum = 9;
 int main() {
     int arr[10] = { 0 };
 
-    vector<int *> vec(1, NULL);
+    vector<int *> vec(8, NULL);
+    // vec.reserve(16);
+    //
+    // cout << "----------\t" << vec.size() << "\t" << vec.capacity() << "\t" << &*vec.begin() << "\t----------" << endl;
+    //
+    //
+    // vec.resize(1);
+    // vec.reserve(4);
+    //
+    // cout << "----------\t" << vec.size() << "\t" << vec.capacity() << "\t" << &*vec.begin() << "\t----------" << endl;
+    //
+    // vec.resize(2);
+    // vec.shrink_to_fit();
+    // // feature introduced by the latest revision of the C++ standard (2011). Older compilers may not support it.
+    // // it doesn't
+    //
+    // cout << "----------\t" << vec.size() << "\t" << vec.capacity() << "\t" << &*vec.begin() << "\t----------" << endl;
+
+    cout << &vec[0] << endl;
+    cout << &vec[1] << endl;
+    cout << &vec[1] - &vec[0] << endl;
+
+    return 0;
+
     // for (int i = 0; i < 5; ++i) {
     //     vec.push_back(arr + i);
     // }
@@ -18,11 +41,8 @@ int main() {
     //
     // vec.reserve(5);
 
-    cout << vec.size() << endl;
-    cout << vec.capacity() << endl;
-    cout << &*vec.begin() << endl;
 
-    cout << "====================================================" << endl;
+    cout << "========================================" << endl;
 
     for (size_t i = 0; i < TravNum; i++) {
         cout << i << '\t' << vec[i] << endl;
