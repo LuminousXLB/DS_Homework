@@ -8,6 +8,10 @@ template <class elemType>
 class BinaryTree {
  private:
   vector<elemType *> store_;
+  static void defaultfunc(const elemType &elem) {
+    // 默认函数
+    cout << elem << '\t';
+  }
 
  public:
   BinaryTree() : store_(1, nullptr) {
@@ -47,6 +51,8 @@ class BinaryTree {
       void (*f)(const elemType &) = defaultfunc);  // 后序遍历
   void hierarchicalTraverse(
       void (*f)(const elemType &) = defaultfunc);  // 层级遍历
+  void createTree(const elemType &flag);
+
  private:
   void assign(size_t index, const elemType &data) {
     // private: 单个赋值
@@ -104,10 +110,6 @@ class BinaryTree {
     }
     return index;
   }
-  static void defaultfunc(const elemType &elem) {
-    // 默认函数
-    cout << elem << '\t';
-  }
   bool removeSubtree(size_t index) {
     if (remove(index)) {
       removeSubtree(index * 2);
@@ -120,21 +122,21 @@ class BinaryTree {
   void preOrder(size_t index, void (*f)(const elemType &elem)) {
     if (index < store_.size() && store_[index]) {
       f(*store_[index]);
-      preOrder(index * 2);
-      preOrder(index * 2 + 1);
+      preOrder(index * 2, f);
+      preOrder(index * 2 + 1, f);
     }
   }
   void midOrder(size_t index, void (*f)(const elemType &elem)) {
     if (index < store_.size() && store_[index]) {
-      preOrder(index * 2);
+      midOrder(index * 2, f);
       f(*store_[index]);
-      preOrder(index * 2 + 1);
+      midOrder(index * 2 + 1, f);
     }
   }
   void postOrder(size_t index, void (*f)(const elemType &elem)) {
     if (index < store_.size() && store_[index]) {
-      preOrder(index * 2);
-      preOrder(index * 2 + 1);
+      postOrder(index * 2, f);
+      postOrder(index * 2 + 1, f);
       f(*store_[index]);
     }
   }
@@ -287,4 +289,33 @@ void BinaryTree<elemType>::hierarchicalTraverse(void (*f)(const elemType &)) {
       (*f)(*store_[i]);
     }
   }
+}
+
+template <class elemType>
+void BinaryTree<elemType>::createTree(const elemType &flag) {
+  queue<size_t> que;
+
+  elemType x, ldata, rdata;
+  cout << "\nEnter the root node: ";
+  cin >> x;
+
+  assign(1, x);
+  que.push(1);
+
+  while (!que.empty()) {
+    size_t i = que.front();
+    cout << "\nEnter the 2 sons' of " << *store_[1] << ", (" << flag
+         << " as NULL): ";
+    cin >> ldata >> rdata;
+    if (ldata != flag) {
+      que.push(i * 2);
+      assign(i * 2, ldata);
+    }
+    if (rdata != flag) {
+      que.push(i * 2 + 1);
+      assign(i * 2 + 1, rdata);
+    }
+    que.pop();
+  }
+  cout << "create completed!\n";
 }
