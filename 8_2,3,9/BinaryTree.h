@@ -8,13 +8,6 @@ template <class elemType>
 class BinaryTree {
  private:
   vector<elemType *> store_;
-  void assign(size_t index, const elemType &data);  // 单个赋值
-  bool remove(size_t index);                        // 单个删除
-  size_t find(const elemType &elem);                // 查找elem的位置
-  static void defaultfunc(const elemType &elem) {
-    // 默认函数
-    cout << elem << '\t';
-  }
 
  public:
   BinaryTree() : store_(1, nullptr) {
@@ -28,7 +21,7 @@ class BinaryTree {
     // 拷贝构造函数
     store_.reserve(bt.store_.size());
     for (size_t i = 1; i < bt.store_.size(); ++i) {
-      if(bt.store_[i]) {
+      if (bt.store_[i]) {
         assign(i, *bt.store_[i]);
       }
     }
@@ -55,6 +48,66 @@ class BinaryTree {
   void hierarchicalTraverse(
       void (*f)(const elemType &) = defaultfunc);  // 层级遍历
  private:
+  void assign(size_t index, const elemType &data) {
+    // private: 单个赋值
+    if (index >= store_.size()) {
+      // 若index超过size的范围，则需resize
+      size_t newsize = index + 1;
+      if (newsize > store_.capacity()) {
+        // 若resize会触发重新分配，则使capacity倍增，减少重新分配的次数
+        size_t newcapacity = newsize * 2;
+        while (newsize > newcapacity) {
+          newcapacity *= 2;
+        }
+        store_.reserve(newcapacity);
+      }
+      // 调用resize增大长度并使用空指针初始化
+      store_.resize(newsize, nullptr);
+    }
+    if (store_[index]) {
+      // index处原非空
+      if (*store_[index] == data) {
+        return;
+      } else {
+        delete store_[index];
+      }
+    }
+    // 设定新值
+    store_[index] = new elemType(data);
+  }
+  bool remove(size_t index) {
+    // private: 单个删除
+    if ((index < store_.size()) && store_[index]) {
+      // index处原非空，析构，清空指针
+      delete store_[index];
+      store_[index] = nullptr;
+
+      return true;
+    } else {
+      // index处原为空
+      return false;
+    }
+  }
+  size_t find(const elemType &elem) {
+    // 查找elem的位置
+    size_t index = 0;
+    for (size_t i = 1; i < store_.size(); i++) {
+      if (store_[i]) {
+        // 遍历非空元素
+        if (elem == *store_[i]) {
+          if (&elem == store_[i]) {
+            return i;
+          }
+          index = i;
+        }
+      }
+    }
+    return index;
+  }
+  static void defaultfunc(const elemType &elem) {
+    // 默认函数
+    cout << elem << '\t';
+  }
   bool removeSubtree(size_t index) {
     if (remove(index)) {
       removeSubtree(index * 2);
@@ -86,68 +139,6 @@ class BinaryTree {
     }
   }
 };
-
-template <class elemType>
-void BinaryTree<elemType>::assign(size_t index, const elemType &data) {
-  // private: 单个赋值
-  if (index >= store_.size()) {
-    // 若index超过size的范围，则需resize
-    size_t newsize = index + 1;
-    if (newsize > store_.capacity()) {
-      // 若resize会触发重新分配，则使capacity倍增，减少重新分配的次数
-      size_t newcapacity = newsize * 2;
-      while (newsize > newcapacity) {
-        newcapacity *= 2;
-      }
-      store_.reserve(newcapacity);
-    }
-    // 调用resize增大长度并使用空指针初始化
-    store_.resize(newsize, nullptr);
-  }
-  if (store_[index]) {
-    // index处原非空
-    if (*store_[index] == data) {
-      return;
-    } else {
-      delete store_[index];
-    }
-  }
-  // 设定新值
-  store_[index] = new elemType(data);
-}
-
-template <class elemType>
-bool BinaryTree<elemType>::remove(size_t index) {
-  // private: 单个删除
-  if ((index < store_.size()) && store_[index]) {
-    // index处原非空，析构，清空指针
-    delete store_[index];
-    store_[index] = nullptr;
-
-    return true;
-  } else {
-    // index处原为空
-    return false;
-  }
-}
-
-template <class elemType>
-size_t BinaryTree<elemType>::find(const elemType &elem) {
-  // 查找elem的位置
-  size_t index = 0;
-  for (size_t i = 1; i < store_.size(); i++) {
-    if (store_[i]) {
-      // 遍历非空元素
-      if (elem == *store_[i]) {
-        if (&elem == store_[i]) {
-          return i;
-        }
-        index = i;
-      }
-    }
-  }
-  return index;
-}
 
 template <class elemType>
 void BinaryTree<elemType>::clear() {
@@ -219,7 +210,7 @@ elemType *BinaryTree<elemType>::rchild(const elemType &elem) const {
 }
 
 template <class elemType>
-bool delLeft(const elemType &elem) {
+bool BinaryTree<elemType>::delLeft(const elemType &elem) {
   // 删除左子树
   size_t index = find(elem);
   store_.shrink_to_fit();
@@ -227,7 +218,7 @@ bool delLeft(const elemType &elem) {
 }
 
 template <class elemType>
-bool delRight(const elemType &elem) {
+bool BinaryTree<elemType>::delRight(const elemType &elem) {
   // 删除右子树
   size_t index = find(elem);
   store_.shrink_to_fit();
@@ -252,7 +243,7 @@ void BinaryTree<elemType>::MakeTree(elemType rootelem, BinaryTree &tl,
     assign(index, *tl.store_[i]);
     lque.push(index * 2);
     lque.push(index * 2 + 1);
-    lque.pop;
+    lque.pop();
     ++i;
   }
 
@@ -264,7 +255,7 @@ void BinaryTree<elemType>::MakeTree(elemType rootelem, BinaryTree &tl,
     assign(index, *tr.store_[i]);
     rque.push(index * 2);
     rque.push(index * 2 + 1);
-    rque.pop;
+    rque.pop();
     ++i;
   }
   store_.shrink_to_fit();
