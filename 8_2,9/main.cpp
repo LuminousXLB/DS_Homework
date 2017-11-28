@@ -3,37 +3,23 @@
 
 using namespace std;
 
-
 int main() {
-    int a[] = { 10, 8, 6, 21, 87, 56, 4, 0, 11, 3, 22, 7, 5, 34, 1, 2, 9 };
+  int a[] = {10, 8, 6, 21, 87, 56, 4, 0, 11, 3, 22, 7, 5, 34, 1, 2, 9};
 
-    BinarySearchTree<int> tree;
+  BinarySearchTree<int> tree;
 
-    for (int i = 0; i < 17; ++i) {
-        tree.insert(a[i]);
-    }
+  for (int i = 0; i < 17; ++i) {
+    tree.insert(a[i]);
+  }
 
-    cout << endl;
-    cout << "find 2 is " << (tree.find(2) ? "true" : "false") << endl;
-    tree.remove(2);
-    cout << "after delete 2, find 2 is " << (tree.find(2) ? "true" : "false")
-         << endl;
-    
-    cout << endl;
-    cout << "find 3 is " << (tree.find(3) ? "true" : "false") << endl;
-    tree.remove(3);
-    cout << "after delete 3, find 3 is " << (tree.find(3) ? "true" : "false")
-         << endl;
-    
-    cout << endl;
-    cout << "find 21 is " << (tree.find(21) ? "true" : "false") << endl;
-    tree.remove(21);
-    cout << "after delete 21, find 21 is " << (tree.find(21) ? "true" : "false")
-         << endl;
-    
-    cout << endl;
-    cout << "find 1 is " << (tree.find(1) ? "true" : "false") << endl;
-    cout << "find 22 is " << (tree.find(22) ? "true" : "false") << endl;
-    cout << "find 38 is " << (tree.find(38) ? "true" : "false") << endl;
-    return 0;
+  tree.print();
+  cout << "the 1st max is " << tree.findIthMax(1) << endl;
+  cout << "the " << 6 << "th max is " << tree.findIthMax(6) << endl;
+  cout << "the " << 17 << "th max is " << tree.findIthMax(17) << endl;
+
+  tree.removeLessT(4);
+  cout << "aftre remove elements less than 4," << endl;
+  tree.print();
+
+  return 0;
 }
