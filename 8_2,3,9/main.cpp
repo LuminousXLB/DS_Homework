@@ -13,11 +13,10 @@ int main() {
         tree.insert(a[i]);
     }
 
-    // tree.midOrder();
+    tree.midOrder();
     cout << endl;
     cout << "find 2 is " << (tree.find(2) ? "true" : "false") << endl;
     tree.remove(2);
-    // tree.midOrder();
     cout << "after delete 2, find 2 is " << (tree.find(2) ? "true" : "false")
          << endl;
     
@@ -37,5 +36,6 @@ int main() {
     cout << "find 1 is " << (tree.find(1) ? "true" : "false") << endl;
     cout << "find 22 is " << (tree.find(22) ? "true" : "false") << endl;
     cout << "find 38 is " << (tree.find(38) ? "true" : "false") << endl;
+    tree.midOrder();
     return 0;
 }

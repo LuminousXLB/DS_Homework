@@ -17,7 +17,10 @@ class BinarySearchTree {
   BinaryNode *root;
 
  public:
-  BinarySearchTree(BinaryNode *t = NULL) { root = t; }
+  BinarySearchTree(BinaryNode *t = NULL) {
+    // 构造树
+    root = t;
+  }
   ~BinarySearchTree() {
     // 非递归析构树
     stack<BinaryNode *> pool;
@@ -31,11 +34,23 @@ class BinarySearchTree {
     }
   }
   bool find(const Type &x) const;
+  const Type &findKmax(size_t k) const {
+    // TODO: 
+  }
   void insert(const Type &x);
   void remove(const Type &x);
+  void removeLessT(const Type &sup) {
+    // TODO:
+  }
+  void removeLargeT(const Type &inf) {
+    // TODO:
+  }
+  void removeBetween(const Type &inf, const Type &sup) {
+    // TODO:
+  }
   void midOrder() const {
     if (root != NULL) {
-      cout << "\nmidOrder\n";
+      cout << "\nmidOrder\t";
       midOrder(root);
     }
   }
