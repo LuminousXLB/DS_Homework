@@ -18,10 +18,11 @@ class BinarySearchTree {
 
  public:
   BinarySearchTree(BinaryNode *t = NULL) { root = t; }
-  ~BinarySearchTree() { 
+  ~BinarySearchTree() {
+    // 非递归析构树
     stack<BinaryNode *> pool;
     pool.push(root);
-    while(!pool.empty()) {
+    while (!pool.empty()) {
       BinaryNode *tmp = pool.top();
       pool.pop();
       if (tmp->left) pool.push(tmp->left);
@@ -42,12 +43,9 @@ class BinarySearchTree {
  private:
   void midOrder(BinaryNode *t) const {
     if (t != NULL) {
-      cout << "\t** " << t << "\t" << t->data << " **" << endl;
       midOrder(t->left);       //先中序遍历左子树
       cout << t->data << ' ';  //然后遍历左子树
       midOrder(t->right);      //最后中序遍历左子树
-    } else {
-      cout << "\t** " << t << " **" << endl;
     }
   }
 };
@@ -55,10 +53,7 @@ class BinarySearchTree {
 template <class Type>
 bool BinarySearchTree<Type>::find(const Type &x) const {
   BinaryNode *t = root;
-  // cout << "FIND " << x << endl;
-  // cout << root << '\t' << root->data << endl;
   while (t) {
-    // cout << "\nDEBUG\t" << t->data;
     if (x < t->data) {
       t = t->left;  // x在t左侧，查找左子树
     } else if (x > t->data) {
@@ -66,14 +61,12 @@ bool BinarySearchTree<Type>::find(const Type &x) const {
     } else {
       return true;  // 查找指针的值等于x，返回找到
     }
-    // cout << '\t' << t->data << endl;
   }
   return false;  // 查找指针为空，返回未找到
 }
 
 template <class Type>
 void BinarySearchTree<Type>::insert(const Type &x) {
-  // cout << "INSERT\t";
   if (root) {
     BinaryNode *t = root;
     while (t) {
@@ -84,7 +77,6 @@ void BinarySearchTree<Type>::insert(const Type &x) {
         } else {
           // 查找指针为空，新建节点，插入到t->left位置
           t->left = new BinaryNode(x, NULL, NULL);
-          // cout << t->left->left << '\t' << t->left->right << endl;
           return;
         }
       } else if (x > t->data) {
@@ -94,7 +86,6 @@ void BinarySearchTree<Type>::insert(const Type &x) {
         } else {
           // 查找指针为空，新建节点，插入到t->right位置
           t->right = new BinaryNode(x, NULL, NULL);
-          // cout << t->right->left << '\t' << t->right->right << endl;
           return;
         }
       } else {
@@ -103,7 +94,6 @@ void BinarySearchTree<Type>::insert(const Type &x) {
     }
   } else {
     root = new BinaryNode(x, NULL, NULL);
-    // cout << root->left << '\t' << root->right << endl;
     return;
   }
 }
@@ -124,13 +114,10 @@ void BinarySearchTree<Type>::remove(const Type &x) {
         // t有两个儿子
         BinaryNode *tmp = t->right;  // tmp指向t的右子树
         history.push(t->right);
-        // cout << "\t** " << t << "\t" << t->data << " **" << endl;
         while (tmp) {
-          // cout << "\t** " << tmp << " **" << endl;
           history.push(tmp->left);
           tmp = history.top();  // 右子树最小节点
         }
-        // cout << "\t** " << t << "\t" << t->data << " **" << endl;
         history.pop();
         tmp = history.top();
         t->data = tmp->data;  // 把右子树最小节点复制到t节点
