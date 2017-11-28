@@ -97,33 +97,51 @@ void BinarySearchTree<Type>::insert(const Type &x) {
 
 template <class Type>
 void BinarySearchTree<Type>::remove(const Type &x) {
+  stack<BinaryNode *> history;
   BinaryNode *t = root;
+  history.push(root);
   while (t) {
     if (x < t->data) {
-      t = t->left;  // x在t左侧，在其左子树删除
+      history.push(t->left);  // x在t左侧，在其左子树删除
     } else if (x > t->data) {
-      t = t->right;  // x在t右侧，在其右子树删除
+      history.push(t->right);  // x在t右侧，在其右子树删除
     } else {
       // 指针的值等于x
       if (t->left != NULL && t->right != NULL) {
         // t有两个儿子
         BinaryNode *tmp = t->right;  // tmp指向t的右子树
-        while (tmp->left != NULL) {
-          tmp = tmp->left;  // 右子树最小节点
+        history.push(t->right);
+        while (tmp) {
+          history.push(t->left);
+          tmp = history.top();  // 右子树最小节点
         }
+        history.pop();
+        tmp = history.top();
         t->data = tmp->data;  // 把右子树最小节点复制到t节点
         // 删除t右子树的最小节点
         BinaryNode *oldNode = tmp;
         tmp = tmp->right;
         delete oldNode;
+        history.pop();
+        history.top()->left = tmp;
       } else {
         // 处理t只有一个儿子的情况
         BinaryNode *oldNode = t;
         t = (t->left != NULL) ? t->left : t->right;
         delete oldNode;
+        history.pop();
+        BinaryNode *parent = history.top();
+        if (x > parent->data) {
+          parent->right = t;
+        } else {
+          parent->left = t;
+        }
       }
+      break;
     }
+    t = history.top();
   }
+
   // 指针为空，返回，没有找到x
   cout << "delete 2 complete" << endl;
 }
