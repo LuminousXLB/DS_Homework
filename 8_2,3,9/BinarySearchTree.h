@@ -18,13 +18,23 @@ class BinarySearchTree {
 
  public:
   BinarySearchTree(BinaryNode *t = NULL) { root = t; }
-  ~BinarySearchTree() { remove(root->data); }
+  ~BinarySearchTree() { 
+    stack<BinaryNode *> pool;
+    pool.push(root);
+    while(!pool.empty()) {
+      BinaryNode *tmp = pool.top();
+      pool.pop();
+      if (tmp->left) pool.push(tmp->left);
+      if (tmp->right) pool.push(tmp->right);
+      delete tmp;
+    }
+  }
   bool find(const Type &x) const;
   void insert(const Type &x);
   void remove(const Type &x);
   void midOrder() const {
     if (root != NULL) {
-      cout << "\nmidOrder\t";
+      cout << "\nmidOrder\n";
       midOrder(root);
     }
   }
@@ -32,9 +42,12 @@ class BinarySearchTree {
  private:
   void midOrder(BinaryNode *t) const {
     if (t != NULL) {
+      cout << "\t** " << t << "\t" << t->data << " **" << endl;
       midOrder(t->left);       //先中序遍历左子树
       cout << t->data << ' ';  //然后遍历左子树
       midOrder(t->right);      //最后中序遍历左子树
+    } else {
+      cout << "\t** " << t << " **" << endl;
     }
   }
 };
@@ -42,7 +55,7 @@ class BinarySearchTree {
 template <class Type>
 bool BinarySearchTree<Type>::find(const Type &x) const {
   BinaryNode *t = root;
-  cout << "FIND " << x << endl;
+  // cout << "FIND " << x << endl;
   // cout << root << '\t' << root->data << endl;
   while (t) {
     // cout << "\nDEBUG\t" << t->data;
@@ -111,10 +124,13 @@ void BinarySearchTree<Type>::remove(const Type &x) {
         // t有两个儿子
         BinaryNode *tmp = t->right;  // tmp指向t的右子树
         history.push(t->right);
+        // cout << "\t** " << t << "\t" << t->data << " **" << endl;
         while (tmp) {
-          history.push(t->left);
+          // cout << "\t** " << tmp << " **" << endl;
+          history.push(tmp->left);
           tmp = history.top();  // 右子树最小节点
         }
+        // cout << "\t** " << t << "\t" << t->data << " **" << endl;
         history.pop();
         tmp = history.top();
         t->data = tmp->data;  // 把右子树最小节点复制到t节点
@@ -143,5 +159,5 @@ void BinarySearchTree<Type>::remove(const Type &x) {
   }
 
   // 指针为空，返回，没有找到x
-  cout << "delete 2 complete" << endl;
+  cout << "delete " << x << " complete" << endl;
 }
