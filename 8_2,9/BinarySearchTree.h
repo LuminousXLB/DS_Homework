@@ -9,8 +9,7 @@ class InvalidRank {};
 template <class Type>
 class BinarySearchTree {
  private:
-  struct BinaryNode  //二叉树结点结构
-  {
+  struct BinaryNode {   //二叉树结点结构
     Type data;          //节点键值
     BinaryNode *left;   //指向左孩子的指针
     BinaryNode *right;  //指向右孩子的指针
@@ -24,7 +23,6 @@ class BinarySearchTree {
   ~BinarySearchTree() {
     // 非递归析构树
     makeEmpty(root);
-    root = NULL;
   }
   bool find(const Type &x) const;
   const Type &findIthMax(size_t i) const {
@@ -38,33 +36,10 @@ class BinarySearchTree {
   }
   void insert(const Type &x);
   void remove(const Type &x);
-  void removeLessT(const Type &sup) {
-    // 删除小于sup的所有元素
-    vector<BinaryNode *> lst = serialize();
-    for (size_t i = 0; i < lst.size(); ++i) {
-      if (lst[i]->data < sup) {
-        remove(lst[i]->data, lst[i]);
-      }
-    }
-  }
-  void removeLargeT(const Type &inf) {
-    // 删除大于inf的所有元素
-    vector<BinaryNode *> lst = serialize();
-    for (size_t i = 0; i < lst.size(); ++i) {
-      if (lst[i]->data > inf) {
-        remove(lst[i]->data, lst[i]);
-      }
-    }
-  }
-  void removeBetween(const Type &inf, const Type &sup) {
-    // 删除介于inf和sup的所有元素
-    vector<BinaryNode *> lst = serialize();
-    for (size_t i = 0; i < lst.size(); ++i) {
-      if (lst[i]->data > inf && lst[i]->data < sup) {
-        remove(lst[i]->data, lst[i]);
-      }
-    }
-  }
+  void removeLessThan(const Type &sup);   // 删除小于sup的所有元素
+  void removeLargeThan(const Type &sup);  // 删除大于inf的所有元素
+  void removeBetween(const Type &inf,
+                     const Type &sup);  // 删除介于inf和sup的所有元素
   void print(char sep = ' ') {
     vector<BinaryNode *> lst = serialize();
     for (size_t i = 0; i < lst.size(); ++i) {
@@ -77,6 +52,9 @@ class BinarySearchTree {
   bool find(const Type &x, BinaryNode *t) const;
   void insert(const Type &x, BinaryNode *&t);
   void remove(const Type &x, BinaryNode *&t);
+  void removeLessThan(const Type &sup, BinaryNode *&t);
+  void removeLargeThan(const Type &inf, BinaryNode *&t);
+  void removeBetween(const Type &inf, const Type &sup, BinaryNode *&t);
   void makeEmpty(BinaryNode *&t);
   vector<BinaryNode *> serialize() const {
     vector<BinaryNode *> lst;
@@ -154,12 +132,84 @@ void BinarySearchTree<Type>::remove(const Type &x, BinaryNode *&t) {
 }
 
 template <class Type>
+void BinarySearchTree<Type>::removeLessThan(const Type &sup) {
+  // 删除小于sup的所有元素
+  removeLessThan(sup, root);
+}
+
+template <class Type>
+void BinarySearchTree<Type>::removeLessThan(const Type &sup, BinaryNode *&t) {
+  if (t != NULL) {
+    if (t->data < sup) {
+      if (t->left) {
+        makeEmpty(t->left);
+      }
+      remove(t->data, t);
+      removeLessThan(sup, t);
+    } else if (t->data == sup) {
+      if (t->left) {
+        makeEmpty(t->left);
+      }
+    } else {
+      removeLessThan(sup, t->left);
+    }
+  }
+}
+
+template <class Type>
+void BinarySearchTree<Type>::removeLargeThan(const Type &inf) {
+  // 删除小于sup的所有元素
+  removeLargeThan(inf, root);
+}
+
+template <class Type>
+void BinarySearchTree<Type>::removeLargeThan(const Type &inf, BinaryNode *&t) {
+  if (t != NULL) {
+    if (t->data > inf) {
+      if (t->right) {
+        makeEmpty(t->right);
+      }
+      remove(t->data, t);
+      removeLargeThan(inf, t);
+    } else if (t->data == inf) {
+      makeEmpty(t->right);
+    } else {
+      removeLargeThan(inf, t->right);
+    }
+  }
+}
+
+template <class Type>
+void BinarySearchTree<Type>::removeBetween(const Type &inf, const Type &sup) {
+  // 删除小于sup的所有元素
+  removeBetween(inf, sup, root);
+}
+
+template <class Type>
+void BinarySearchTree<Type>::removeBetween(const Type &inf, const Type &sup,
+                                           BinaryNode *&t) {
+  if (t != NULL) {
+    if (t->data > inf && t->data < sup) {
+      remove(t->data, t);
+      removeBetween(inf, sup, t);
+    } else {
+      removeBetween(inf, sup, t->left);
+      removeBetween(inf, sup, t->right);
+    }
+  }
+}
+
+template <class Type>
 void BinarySearchTree<Type>::makeEmpty(BinaryNode *&t) {
-  if (t->left) {
-    makeEmpty(t->left);
+  if (t != NULL) {
+    if (t->left) {
+      makeEmpty(t->left);
+    }
+    if (t->right) {
+      makeEmpty(t->right);
+    }
+    BinaryNode *oldNode = t;
+    t = NULL;
+    delete oldNode;
   }
-  if (t->right) {
-    makeEmpty(t->right);
-  }
-  delete t;
 }
