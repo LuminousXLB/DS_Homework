@@ -22,7 +22,7 @@ class BinarySearchTree {
     root = t;
   }
   ~BinarySearchTree() {
-    // 非递归析构树
+    // 非递归析构树（栈实现）
     stack<BinaryNode *> pool;
     pool.push(root);
     root = NULL;
@@ -81,7 +81,7 @@ class BinarySearchTree {
   void remove(const Type &x) {
     stack<BinaryNode *> history;
     BinaryNode *t = root;
-    history.push(root);
+    history.push(root); // 用这个东西记录筛查历史，以便于删除元素时定位父节点
     while (t) {
       if (x < t->data) {
         history.push(t->left);  // x在t左侧，在其左子树删除
@@ -90,28 +90,29 @@ class BinarySearchTree {
       } else {
         // 指针的值等于x
         if (t->left != NULL && t->right != NULL) {
-          // t有两个儿子
+          // t有两个儿子，把最小的右孙子拿上来当父亲
+          // 找到最小的右儿子
           BinaryNode *tmp = t->right;  // tmp指向t的右子树
           history.push(t->right);
           while (tmp) {
             history.push(tmp->left);
             tmp = history.top();  // 右子树最小节点
           }
-          history.pop();
+          history.pop(); // 把栈顶的NULL丢掉
           tmp = history.top();
           t->data = tmp->data;  // 把右子树最小节点复制到t节点
           // 删除t右子树的最小节点
           BinaryNode *oldNode = tmp;
           tmp = tmp->right;
           delete oldNode;
-          history.pop();
+          history.pop(); // 把栈顶的最小右孙子丢掉，让他爹露出来
           history.top()->left = tmp;
         } else {
-          // 处理t只有一个儿子的情况
+          // 处理t只有一个儿子的情况，直接把剩的那个儿子拽上来就好了
           BinaryNode *oldNode = t;
           t = (t->left != NULL) ? t->left : t->right;
           delete oldNode;
-          history.pop();
+          history.pop();  // 把栈顶的NULL丢掉
           BinaryNode *parent = history.top();
           if (x > parent->data) {
             parent->right = t;
