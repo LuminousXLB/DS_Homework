@@ -141,17 +141,14 @@ template <class Type>
 void BinarySearchTree<Type>::removeLessThan(const Type &sup, BinaryNode *&t) {
   if (t != NULL) {
     if (t->data < sup) {
-      if (t->left) {
-        makeEmpty(t->left);
-      }
-      remove(t->data, t);
-      removeLessThan(sup, t);
+      makeEmpty(t->left);  // 若t结点的数据小于sup，则t的左子树全部小于sup
+      remove(t->data, t);  // 移除t结点，并将右子树中最小的结点移到t处
+      removeLessThan(sup, t);  // 重新从t开始移除
     } else if (t->data == sup) {
-      if (t->left) {
-        makeEmpty(t->left);
-      }
+      makeEmpty(t->left);  // t的左子树全部小于sup，t的右子树全部大于sup
     } else {
-      removeLessThan(sup, t->left);
+      // t->data > sup
+      removeLessThan(sup, t->left);  // t的右子树全部大于sup，检查t的左子树
     }
   }
 }
@@ -166,15 +163,14 @@ template <class Type>
 void BinarySearchTree<Type>::removeLargeThan(const Type &inf, BinaryNode *&t) {
   if (t != NULL) {
     if (t->data > inf) {
-      if (t->right) {
-        makeEmpty(t->right);
-      }
-      remove(t->data, t);
-      removeLargeThan(inf, t);
+      makeEmpty(t->right);  // 若t结点的数据大于inf，则t的右子树全部大于inf
+      remove(t->data, t);  // 移除t结点的数据，已经没有右子树，故t将指向左子树
+      removeLargeThan(inf, t);  // 继续检查
     } else if (t->data == inf) {
-      makeEmpty(t->right);
+      makeEmpty(t->right);  // t的左子树全部小于inf，t的右子树全部大于inf
     } else {
-      removeLargeThan(inf, t->right);
+      // t->data < inf
+      removeLargeThan(inf, t->right);  // t的左子树全部小于inf，检查t的右子树
     }
   }
 }
@@ -190,11 +186,11 @@ void BinarySearchTree<Type>::removeBetween(const Type &inf, const Type &sup,
                                            BinaryNode *&t) {
   if (t != NULL) {
     if (t->data > inf && t->data < sup) {
-      remove(t->data, t);
-      removeBetween(inf, sup, t);
+      remove(t->data, t);          // 若t在移除的范围内，则移除t
+      removeBetween(inf, sup, t);  // 移除导致t的值发生变化，重新检查t
     } else {
-      removeBetween(inf, sup, t->left);
-      removeBetween(inf, sup, t->right);
+      removeBetween(inf, sup, t->left);   // 检查左子树
+      removeBetween(inf, sup, t->right);  // 检查右子树
     }
   }
 }
