@@ -4,7 +4,7 @@ using namespace std;
 
 template <class T>
 bool defaultcomp(const T& a, const T& b) {
-  return a <= b;
+  return a < b;
 }
 
 template <class T>
@@ -14,13 +14,13 @@ void quicksort(T arr[], size_t len,
     T std = arr[0];
     size_t il = 0, ir = len - 1;
     while (il != ir) {
-      while (il < ir && arr[ir] >= std) {
+      while (il < ir && !comp(arr[ir], std) /* arr[ir] >= std */) {
         --ir;
       }
       if (il < ir) {
         arr[il] = arr[ir];
       }
-      while (il < ir && arr[il] <= std) {
+      while (il < ir && !comp(std, arr[il]) /* arr[il] <= std */) {
         ++il;
       }
       if (il < ir) {
