@@ -13,32 +13,66 @@ class priorityQueue {
 
  public:
   priorityQueue(bool (*comp)(const T& a, const T& b) = default_comp) {
+    T randinit;
+    que_.push_back(randinit);
     comp_ = comp;
   }
+  priorityQueue(T arr[], size_t len,
+                bool (*comp)(const T& a, const T& b) = default_comp) {
+    T randinit;
+    que_.push_back(randinit);
+    comp_ = comp;
+    for (size_t i = 0; i < len; ++i) {
+      que_.push_back(arr[i]);
+    }
+    for (size_t i = size() / 2; i > 0; --i) {
+      percolateDown(i);
+    }
+  }
+
   ~priorityQueue() {}
+
   bool empty() { return que_.size() < 2; }
+
   size_t size() { return que_.size() - 1; }
+
   T top() { return que_[1]; }
+
   bool push(const T& x) {
     que_.push_back(x);
-
     size_t ikid = que_.size() - 1;
-    while (que_[ikid] < que_[ikid / 2]) {
+    while (ikid > 1 && comp_(que_[ikid], que_[ikid / 2])) {
       que_[ikid] = que_[ikid / 2];
       que_[ikid / 2] = x;
       ikid /= 2;
     }
   }
+
   void pop() {
     // TODO: POP
-    precolateDown(1);
+    que_[1] = que_[size()];
+    que_.resize(size());
+    percolateDown(1);
   }
 
  private:
-  void precolateDown(int hole) {
-    size_t kid = que_[2 * hole] < que_[2 * hole + 1] ? 2 * hole : 2 * hole + 1;
-    que_[hole] = que_[kid];
-    precolateDown(kid);
+  void percolateDown(size_t hole) {
+    T tmp = que_[hole];
+    size_t child = hole * 2;
+
+    while (child < que_.size()) {
+      if (child < size() && comp_(que_[child + 1], que_[child])) {
+        child++;
+      }
+      if (comp_(que_[child], tmp)) {
+        que_[hole] = que_[child];
+      } else {
+        break;
+      }
+      hole = child;
+      child *= 2;
+    }
+    que_[hole] = tmp;
   }
 };
 
