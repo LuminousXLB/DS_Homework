@@ -11,7 +11,24 @@ template <class T>
 void quicksort(T arr[], size_t len,
                bool (*comp)(const T& a, const T& b) = defaultcomp) {
   if (len > 1) {
-    T std = arr[0];
+    // find standard elements
+    size_t si[3] = {0, len / 2, len - 1};  // sample index
+    // Sort sample array
+    if (arr[si[1]] < arr[si[0]]) {
+      size_t tmp = si[1];
+      si[1] = si[0];
+      si[0] = tmp;
+    }
+    if (arr[si[1]] > arr[si[2]]) {
+      size_t tmp = si[1];
+      si[1] = si[2];
+      si[2] = tmp;
+    }
+    // Organize array to fit origin implementation
+    T std = arr[si[1]];
+    arr[si[1]] = arr[0];
+    arr[0] = std;
+    // Quick sort
     size_t il = 0, ir = len - 1;
     while (il != ir) {
       while (il < ir && !comp(arr[ir], std) /* arr[ir] >= std */) {
@@ -28,6 +45,7 @@ void quicksort(T arr[], size_t len,
       }
     }
     arr[il] = std;
+    // Recursion
     quicksort(arr, il, comp);
     quicksort(arr + il + 1, len - il - 1, comp);
   }
