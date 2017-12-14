@@ -1,3 +1,10 @@
+#pragma once
+#include <iostream>
+#include "graph.h"
+#include "linkQueue.h"
+
+using namespace std;
+
 template <class TypeOfVer, class TypeOfEdge>
 class adjListGraph : public graph<TypeOfEdge> {
  public:
@@ -12,6 +19,7 @@ class adjListGraph : public graph<TypeOfEdge> {
   ~adjListGraph();
 
  private:
+  int Vers, Edges;
   struct edgeNode {     //邻接表中存储边的结点类
     int end;            //边终节点编号
     TypeOfEdge weight;  //边的权值
@@ -107,15 +115,16 @@ bool adjListGraph<TypeOfVer, TypeOfEdge>::exist(int u, int v) const {
 
 // public dfs
 
-template <class TypeOfVer, class TypeOfEdge>
-void adjListGraph<TypeOfVer, TypeOfEdge>::dfs(int start, bool visited[]) const {
-  edgeNode *p = verList[start].head;   // p指向邻接表节点表的start
-  cout << verList[start].ver << ‘\t’;  //打印start节点
-  visited[start] = true;               //把起始点标志为已访问
-  while (p != NULL) {                  //避免重复访问
-    if (visited[p->end] == false) dfs(p->end, visited);
-    //如果p没被访问过，则以p为起始点进行递归dfs
-    p = p->next;
+template <class TypeOfVer, class TypeOfEdge>  //基于邻接表
+void adjListGraph<TypeOfVer, TypeOfEdge>::dfs() const {
+  bool *visited = new bool[Vers];  //记录节点是否被遍历
+  for (int i = 0; i < Vers; ++i) visited[i] = false;  //初态设为未访问
+  cout << "当前图的深度优先遍历序列为: " << endl;
+  for (int i = 0; i < Vers; ++i) {     //从节点0开始执行
+    if (visited[i] == true) continue;  //如节点已访问，跳下一循环
+    dfs(i, visited);  //每次到这都产生一棵以i为根的新树
+    //调用私有dfs遍历那些从i出发可访问的所有节点
+    cout << endl;
   }
 }
 
@@ -123,7 +132,7 @@ void adjListGraph<TypeOfVer, TypeOfEdge>::dfs(int start, bool visited[]) const {
 template <class TypeOfVer, class TypeOfEdge>
 void adjListGraph<TypeOfVer, TypeOfEdge>::dfs(int start, bool visited[]) const {
   edgeNode *p = verList[start].head;   // p指向邻接表节点表的start
-  cout << verList[start].ver << ‘\t’;  //打印start节点
+  cout << verList[start].ver << '\t';  //打印start节点
   visited[start] = true;               //把起始点标志为已访问
   while (p != NULL) {                  //避免重复访问
     if (visited[p->end] == false) dfs(p->end, visited);
@@ -143,13 +152,13 @@ void adjListGraph<TypeOfVer, TypeOfEdge>::bfs() const {
   for (int i = 0; i < Vers; ++i) visited[i] = false;  //初始态均未访问
   cout << "当前图的广度优先遍历序列为：" << endl;
 
-  for (i = 0; i < Vers; ++i) {         //考虑当前节点i
+  for (int i = 0; i < Vers; ++i) {     //考虑当前节点i
     if (visited[i] == true) continue;  //节点已访问，跳下一节点
     q.enQueue(i);           //将节点i入队，产生以i为根的树
     while (!q.isEmpty()) {  //(q非空)遍历从i开始所有能遍历节点
       currentNode = q.deQueue();                   //出队队首为当前节点
       if (visited[currentNode] == true) continue;  //已访，下一循环
-      cout << verList[currentNode].ver << ‘\t’;    //打印当前节点
+      cout << verList[currentNode].ver << '\t';    //打印当前节点
       visited[currentNode] = true;    //当前节点标志为已访问
       p = verList[currentNode].head;  // p指向当前节点的边表
       while (p != NULL) {             //如果边表不空
@@ -163,7 +172,7 @@ void adjListGraph<TypeOfVer, TypeOfEdge>::bfs() const {
 
 // private
 template <class TypeOfVer, class TypeOfEdge>
-adjListGraph<TypeOfVer, TypeOfEdge>::EulerNode *
+typename adjListGraph<TypeOfVer, TypeOfEdge>::EulerNode *
 adjListGraph<TypeOfVer, TypeOfEdge>::EulerCircuit(int start, EulerNode *&end) {
   //采用类DFS搜索，‘类’表示不完全一样
   //因为这里没有对访问节点做标记，允许一个回的头尾重合，允许一个节点被访问多次
@@ -206,10 +215,10 @@ void adjListGraph<TypeOfVer, TypeOfEdge>::EulerCircuit(TypeOfVer start) {
   }
 
   //寻找起始结点的编号i
+  int i;
   for (i = 0; i < Vers; ++i)
     if (verList[i].ver == start) break;  //找到则跳出循环
-  if (i == Vers)  //未找到起始节点，因为0<start<Vers
-  {
+  if (i == Vers) {  //未找到起始节点，因为0<start<Vers
     cout << "起始结点不存在" << endl;
     return;
   }
@@ -247,7 +256,7 @@ void adjListGraph<TypeOfVer, TypeOfEdge>::EulerCircuit(TypeOfVer start) {
 }
 
 template <class TypeOfVer, class TypeOfEdge>
-adjListGraph<TypeOfVer, TypeOfEdge>::verNode *
+typename adjListGraph<TypeOfVer, TypeOfEdge>::verNode *
 adjListGraph<TypeOfVer, TypeOfEdge>::clone() const {
   verNode *tmp = new verNode[Vers];  //把邻接表保存在tmp中
   edgeNode *p;
@@ -268,11 +277,11 @@ void adjListGraph<TypeOfVer, TypeOfEdge>::topSort() const {
   edgeNode *p;
   int current, *inDegree = new int[Vers];  //用于记录节点入度
   for (int i = 0; i < Vers; ++i) inDegree[i] = 0;
-  for (i = 0; i < Vers; ++i) {  //遍历每个节点对应的边表
+  for (int i = 0; i < Vers; ++i) {  //遍历每个节点对应的边表
     for (p = verList[i].head; p != NULL; p = p->next)
       ++inDegree[p->end];  //边表中记录的每个节点入度加1
   }
-  for (i = 0; i < Vers; ++i)
+  for (int i = 0; i < Vers; ++i)
     if (inDegree[i] == 0) q.enQueue(i);  //所有入度为0的节点入队
   cout << "拓扑排序为：" << endl;
   while (!q.isEmpty()) {    //如果队列不为空则循环
