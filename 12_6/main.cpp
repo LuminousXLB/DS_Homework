@@ -11,5 +11,6 @@ int main() {
   string courses[] = {"MA080", "MA081", "MA077", "MA256", "PH224",
                       "PH246", "PH114", "PH116", "PH244", "PH245",
                       "PH364", "PH223", "PH302", "PH303"};
-  adjListGraph<string, int> G(14, courses);
+  adjListGraph<string, int> graph(14, courses);
+  // graph.insert(0,1,)
 }

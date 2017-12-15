@@ -1,0 +1,5 @@
+﻿  calculator.cpp
+  ConsoleApplication1.cpp
+d:\calculator\consoleapplication1\consoleapplication1\consoleapplication1.cpp(20): warning C4018: “<”: 有符号/无符号不匹配
+  正在生成代码...
+  ConsoleApplication1.vcxproj -> D:\calculator\ConsoleApplication1\Debug\ConsoleApplication1.exe

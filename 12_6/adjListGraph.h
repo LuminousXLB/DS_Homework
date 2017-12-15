@@ -25,10 +25,10 @@ class adjListGraph : public graph<TypeOfEdge> {
     TypeOfEdge weight;  //边的权值
     edgeNode *next;
     edgeNode(int e, TypeOfEdge w, edgeNode *n = NULL) {
-      end = e;
+      end = e;  // e表示边的终节点
       weight = w;
       next = n;
-    }  // e表示边的终节点
+    }
   };
   struct verNode {   //保存顶点的数据元素类型
     TypeOfVer ver;   //顶点值
