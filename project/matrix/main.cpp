@@ -5,9 +5,9 @@ using namespace std;
 
 int main() {
   // freopen("data.in", "r", stdin);
-  Matrix<int> A();
+  Matrix<int> A;
   A.input();
-  Matrix<int> B();
+  Matrix<int> B;
   B.input();
   cout << endl;
 
@@ -18,7 +18,7 @@ int main() {
 
   cout << multi(A, B) << endl;
 
-  cout << A.det() << enl;
+  cout << A.det() << endl;
 
   return 0;
 }
