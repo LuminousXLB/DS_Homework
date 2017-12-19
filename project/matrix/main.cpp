@@ -5,22 +5,20 @@ using namespace std;
 
 int main() {
   // freopen("data.in", "r", stdin);
-  Matrix<int> A = input_matrix<int>();
-  Matrix<int> B = input_matrix<int>();
+  Matrix<int> A();
+  A.input();
+  Matrix<int> B();
+  B.input();
   cout << endl;
 
-  printMatrix(elementSub(A, B));
+  cout << A - B << endl;
   cout << endl;
 
-  printMatrix(numAdd(1, A));
-  cout << endl;
+  cout << A + 1 << endl;
 
-  printMatrix(mul(A, B));
-  cout << endl;
-  
-  cout << getValue(A) << endl;
+  cout << multi(A, B) << endl;
 
-  del_matrix(A);
-  del_matrix(B);
+  cout << A.det() << enl;
+
   return 0;
 }

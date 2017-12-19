@@ -44,6 +44,7 @@ class Matrix {
       ptr[i] = new T[n];
     }
   }
+  Matrix() : m(0), n(0), ptr(NULL) {}
   Matrix(const Matrix &mat) {
     m = mat.m;
     n = mat.n;
@@ -53,6 +54,12 @@ class Matrix {
   }
   T *operator[](const size_t r) const { return ptr[r]; }
   void input() {
+    // 清除原数据
+    for (size_t i = 0; i < m; i++) {
+      delete[] ptr[i];
+    }
+    delete[] ptr;
+
     // 输入矩阵规模
     do {
       cin.clear();
