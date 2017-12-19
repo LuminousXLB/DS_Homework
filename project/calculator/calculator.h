@@ -10,11 +10,13 @@ class Invalid_Experission {};
 
 enum op_type {
   NUM,
+  OPAR,
   ADD,
   SUB,
   MUL,
   DIV,
   POW,   // 乘方
+  CPAR,
   FACT,  // 阶乘
   EOL
 };
