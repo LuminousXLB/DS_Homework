@@ -91,11 +91,37 @@ class Matrix {
   Matrix(const Matrix &mat) {
     m = mat.m;
     n = mat.n;
+    ptr = new T *[m];
     for (size_t i = 0; i < m; ++i) {
+      ptr[i] = new T[n];
       for (size_t j = 0; j < n; ++j) {
         ptr[i][j] = mat.ptr[i][j];
       }
     }
+  }
+  ~Matrix() {
+    for (size_t i = 0; i < m; ++i) {
+      delete[] ptr[i];
+    }
+    delete[] ptr;
+  }
+  Matrix & operator=(const Matrix &mat) {
+    // 清除原有数据
+    for (size_t i = 0; i < m; ++i) {
+      delete[] ptr[i];
+    }
+    delete[] ptr;
+    // 存入新的数据
+    m = mat.m;
+    n = mat.n;
+    ptr = new T *[m];
+    for (size_t i = 0; i < m; ++i) {
+      ptr[i] = new T[n];
+      for (size_t j = 0; j < n; ++j) {
+        ptr[i][j] = mat.ptr[i][j];
+      }
+    }
+    return *this;
   }
   T *operator[](const size_t r) const { return ptr[r]; }
   void input() {
@@ -150,12 +176,7 @@ class Matrix {
       }
     }
   }
-  ~Matrix() {
-    for (size_t i = 0; i < m; ++i) {
-      delete[] ptr[i];
-    }
-    delete[] ptr;
-  }
+
   T det() {
     if (m == n && m <= 3) {
       return Determinant(ptr, m);
@@ -223,6 +244,7 @@ ostream &operator<<(ostream &os, const Matrix<T> &mat) {
     }
     os << endl;
   }
+  return os;
 }
 
 template <class T>
@@ -232,6 +254,7 @@ istream &operator>>(istream &is, Matrix<T> &mat) {
       is >> mat[i][j];
     }
   }
+  return is;
 }
 
 Matrix<float> load_f(const char *filePath) {
@@ -240,6 +263,7 @@ Matrix<float> load_f(const char *filePath) {
     throw Invalid_File();
   }
   size_t m, n;
+  fin >> m >> n;
   Matrix<float> mat(m, n);
   fin >> mat;
   return mat;
@@ -251,6 +275,7 @@ Matrix<int> load_i(const char *filePath) {
     throw Invalid_File();
   }
   size_t m, n;
+  fin >> m >> n;
   Matrix<int> mat(m, n);
   fin >> mat;
   return mat;
@@ -385,6 +410,7 @@ Matrix<T> multi(const Matrix<T> A, const Matrix<T> B) {
     Matrix<T> ret(A.m, B.n);
     for (size_t i = 0; i < A.m; ++i) {
       for (size_t j = 0; j < B.n; ++j) {
+        ret.ptr[i][j] = 0;
         for (size_t k = 0; k < A.n; k++) {
           ret.ptr[i][j] += A.ptr[i][k] * B.ptr[k][j];
         }
