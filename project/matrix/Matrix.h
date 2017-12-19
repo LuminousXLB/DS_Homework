@@ -8,16 +8,21 @@ class Invalid_File {};
 
 template <class T>
 class Matrix {
+  // 友元声明
+  // 输入输出流
   friend ostream &operator<<(const ostream &os, const Matrix<T> &mat);
   friend istream &operator>>(const istream &is, Matrix<T> &mat);
+  // 矩阵element-wise加减乘除运算
   friend Matrix<T> operator+(const Matrix<T> A, Matrix<T> B);
   friend Matrix<T> operator-(const Matrix<T> A, Matrix<T> B);
   friend Matrix<T> operator*(const Matrix<T> A, Matrix<T> B);
   friend Matrix<T> operator/(const Matrix<T> A, Matrix<T> B);
+  // 矩阵与字面值加减乘除运算
   friend Matrix<T> operator+(const T num, Matrix<T> mat);
   friend Matrix<T> operator-(const T num, Matrix<T> mat);
   friend Matrix<T> operator*(const T num, Matrix<T> mat);
   friend Matrix<T> operator/(const T num, Matrix<T> mat);
+  // 矩阵乘法
   friend Matrix<T> multi(const Matrix<T> A, Matrix<T> B);
 
  private:
@@ -109,6 +114,7 @@ class Matrix {
 
  private:
   T Determinant(T **det, int scale) {
+    // 计算行列式
     if (scale == 1) return det[0][0];
 
     int i = 0, j = 0, k = 0, sgn = 1;
