@@ -8,6 +8,10 @@ int main() {
   char str[80] = {0};
   cout << "> ";
   while (cin >> str) {
-    cout << calculate(str) << endl;
+    try {
+      cout << calculate(str) << endl;
+    } catch (exception) {
+      cout << "Wrong" << endl;
+    }
   }
 }
