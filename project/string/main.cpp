@@ -5,15 +5,16 @@ using namespace std;
 
 int main() {
   vector<string> res = split("1,2,3,4", ",");
-  for (string &x : res) cout << x << '\t';
+  for (size_t i = 0; i < res.size(); ++i) cout << res[i] << '\t';
   cout << endl;
 
   vector<string> res2 = split("1,2,3,4", ".");
-  for (string &x : res2) cout << x << '\t';
+  for (size_t i = 0; i < res2.size(); ++i) cout << res2[i] << '\t';
+
   cout << endl;
 
   vector<string> res3 = split("1##2##3##4", "##");
-  for (string &x : res3) cout << x << '\t';
+  for (size_t i = 0; i < res3.size(); ++i) cout << res3[i] << '\t';
   cout << endl;
 
   string str = "abcdefg";
@@ -22,9 +23,9 @@ int main() {
   string str2 = "abcabc";
   cout << replace_all(str2, "ab", "123") << endl;
 
-  string str = "abcdefg";
-  cout << isStartWith(str, "bcd") << endl;
-  cout << isEndWith(str, "efg") << endl;
+  string str3 = "abcdefg";
+  cout << isStartWith(str3, "bcd") << endl;
+  cout << isEndWith(str3, "efg") << endl;
 
   return 0;
 }
