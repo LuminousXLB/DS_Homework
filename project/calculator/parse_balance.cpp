@@ -1,5 +1,4 @@
 #include "parse_.h"
-#include "stdlib.h"
 using namespace std;
 
 size_t balance(const string &str, const size_t oparen) {
@@ -41,6 +40,6 @@ string content_between_parens(string str, size_t op) {
 //     string ss(content_between_parens(str, op));
 //     cout << ss << endl;
 //   } catch (string e) {
-//     cout << e.get() << endl;
+//     cout << e << endl;
 //   }
 // }

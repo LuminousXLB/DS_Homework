@@ -1,5 +1,4 @@
 #include "parse_.h"
-#include "stdlib.h"
 using namespace std;
 
 struct op {
@@ -67,9 +66,10 @@ op_type classify_character(char ch) {
 vector<op> serialize(string str) {
   // 整理字符串为操作符序列
   const static string tr_ops[9] = {"cos",  "sin", "tan", "acos", "asin",
-                            "atan", "exp", "log", "log10"};
-  const static op tr_lst[9] = {COS, SIN, TAN, ACOS, ASIN, ATAN, EXP, LOG, LOG10};
-  
+                                   "atan", "exp", "log", "log10"};
+  const static op tr_lst[9] = {COS,  SIN, TAN, ACOS, ASIN,
+                               ATAN, EXP, LOG, LOG10};
+
   vector<op> serial;
 
   size_t head = -1;
@@ -87,7 +87,7 @@ vector<op> serialize(string str) {
           break;
         }
       }
-      throw Invalid_Experission();
+      throw "ERROR: Invalid Character Found";
     } else if (type == NUM) {
       // 若为数
       size_t op = head;
