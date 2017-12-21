@@ -11,12 +11,13 @@ int main() {
   while (cin >> str) {
     try {
       cout << eval_calc(str) << endl;
-    } catch (string err) {
+    } catch (char const * err) {
       if (__DEBUG__) {
         cout << err << endl;
       } else {
         cout << "Wrong" << endl;
       }
     }
+    cout << "> ";
   }
 }

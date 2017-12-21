@@ -86,14 +86,17 @@ vector<op> serialize(string str) {
       // 若为数
       size_t start = head;
       while (head < str.length()) {
-        if (classify_character(str[head++]) != NUM) {
+        if (classify_character(str[head]) != NUM) {
           break;
+        } else {
+          head++;
         }
       }
-      head--;
 
       double value = atof(str.substr(start, head - start).c_str());
       serial.push_back(op(value));
+
+      head--;
     } else {
       // 若为运算符
       serial.push_back(op(type));
