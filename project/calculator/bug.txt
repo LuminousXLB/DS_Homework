@@ -1,13 +1,9 @@
-parse_serialize.cpp: In function 'std::vector<op> serialize(std::__cxx11::string)':
-parse_serialize.cpp:95:14: warning: unused variable 'value' [-Wunused-variable]
-       double value = atof(str.substr(op, head - op).c_str());
-              ^~~~~
-C:\Users\john9\AppData\Local\Temp\cc5nrnuJ.o:calc_operate.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
-C:\Users\john9\AppData\Local\Temp\cc2Ex6Uk.o:calc_calculate.cpp:(.text+0x0): first defined here
-C:\Users\john9\AppData\Local\Temp\ccf8r4Wo.o:main.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
-C:\Users\john9\AppData\Local\Temp\cc2Ex6Uk.o:calc_calculate.cpp:(.text+0x0): first defined here
-C:\Users\john9\AppData\Local\Temp\ccc7DF4g.o:parse_balance.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
-C:\Users\john9\AppData\Local\Temp\cc2Ex6Uk.o:calc_calculate.cpp:(.text+0x0): first defined here
-C:\Users\john9\AppData\Local\Temp\ccPCEB6k.o:parse_serialize.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
-C:\Users\john9\AppData\Local\Temp\cc2Ex6Uk.o:calc_calculate.cpp:(.text+0x0): first defined here
+C:\Users\john9\AppData\Local\Temp\cctJJ44Q.o:calc_operate.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
+C:\Users\john9\AppData\Local\Temp\cczp15CN.o:calc_calculate.cpp:(.text+0x0): first defined here
+C:\Users\john9\AppData\Local\Temp\cciu9tD8.o:main.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
+C:\Users\john9\AppData\Local\Temp\cczp15CN.o:calc_calculate.cpp:(.text+0x0): first defined here
+C:\Users\john9\AppData\Local\Temp\ccOmaBNR.o:parse_balance.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
+C:\Users\john9\AppData\Local\Temp\cczp15CN.o:calc_calculate.cpp:(.text+0x0): first defined here
+C:\Users\john9\AppData\Local\Temp\ccMuGzBd.o:parse_serialize.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
+C:\Users\john9\AppData\Local\Temp\cczp15CN.o:calc_calculate.cpp:(.text+0x0): first defined here
 collect2.exe: error: ld returned 1 exit status

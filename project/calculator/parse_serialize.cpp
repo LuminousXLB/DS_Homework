@@ -84,7 +84,7 @@ vector<op> serialize(string str) {
       throw "ERROR: Invalid Character Found";
     } else if (type == NUM) {
       // 若为数
-      size_t op = head;
+      size_t start = head;
       while (head < str.length()) {
         if (classify_character(str[head++]) != NUM) {
           break;
@@ -92,7 +92,7 @@ vector<op> serialize(string str) {
       }
       head--;
 
-      double value = atof(str.substr(op, head - op).c_str());
+      double value = atof(str.substr(start, head - start).c_str());
       serial.push_back(op(value));
     } else {
       // 若为运算符

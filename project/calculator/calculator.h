@@ -32,7 +32,8 @@ enum op_type {
   LETTER
 };
 
-struct op {
+class op {
+ public:
   op_type type;
   double val;
   op(double value) : val(value) { type = NUM; }
