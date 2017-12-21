@@ -2,58 +2,58 @@
 
 using namespace std;
 
-void binaryOp(op_type op, vector<double>& num) {
+void binaryOp(op_type op, stack<double>& num) {
   // 计算二元运算符运算结果
   // 读取两个操作数
   double num1, num2;
   if (num.empty()) {
-    throw Invalid_Experission();
+    throw "ERROR: Invalid Experission";
   } else {
-    num1 = num.back();
-    num.pop_back();
+    num1 = num.top();
+    num.pop();
   }
   if (num.empty()) {
-    throw Invalid_Experission();
+    throw "ERROR: Invalid Experission";
   } else {
-    num2 = num.back();
-    num.pop_back();
+    num2 = num.top();
+    num.pop();
   }
   // 进行运算
   switch (op) {
     case ADD:
-      num.push_back(num2 + num1);
+      num.push(num2 + num1);
       break;
     case SUB:
-      num.push_back(num2 - num1);
+      num.push(num2 - num1);
       break;
     case MUL:
-      num.push_back(num2 * num1);
+      num.push(num2 * num1);
       break;
     case DIV:
-      num.push_back(num2 / num1);
+      num.push(num2 / num1);
       break;
     case POW:
-      num.push_back(pow(num2, num1));
+      num.push(pow(num2, num1));
       break;
     default:
-      throw Invalid_Operator();
+      throw "ERROR: Invalid Operator";
   }
 }
 
-void singleOp(op_type op, vector<double>& num) {
+void singleOp(op_type op, stack<double>& num) {
   // 单操作数操作符运算
   // 读取一个操作数
   double num1;
   if (num.empty()) {
-    throw Invalid_Experission();
+    throw "ERROR: Invalid Experission";
   } else {
-    num1 = num.back();
-    num.pop_back();
+    num1 = num.top();
+    num.pop();
   }
   // 一元运算
   switch (op) {
     case FACT:
-      num.push_back(factorial(num1));
+      num.push(factorial(num1));
       break;
   }
 }
