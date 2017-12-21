@@ -4,14 +4,11 @@
 #include <stack>
 #include <string>
 #include <vector>
-#include "calc_.h"
-#include "parse_.h"
 
 using namespace std;
 
-/**
- * File: `parse_serialize.cpp`
- */
+/*************************  OPERATOR DEFINE  **********************************/
+
 enum op_type {
   NUM,
   OPAR,  // 开括号
@@ -35,4 +32,38 @@ enum op_type {
   LETTER
 };
 
-struct op;
+struct op {
+  op_type type;
+  double val;
+  op(double value) : val(value) { type = NUM; }
+  op(op_type T, double value = 0) : type(T), val(value) {}
+};
+
+/*************************  PARSE  ********************************************/
+
+/**
+ * File: `parse_balance.cpp`
+ */
+string content_between_parens(string str);
+
+/**
+ * File: `parse_serialize.cpp`
+ */
+vector<op> serialize(string str);
+
+/*************************  CALCULATE  ****************************************/
+
+/**
+ * File: `calc_operate.cpp`
+ */
+void binaryOp(op_type op, stack<double>& num);
+void singleOp(op_type op, stack<double>& num);
+
+/**
+ * File: `calc_calculate.cpp`
+ */
+double calculate(vector<op> serial);
+
+/*************************  INTERFACE  ****************************************/
+
+double eval_calc(string str) { return calculate(serialize(str)); }

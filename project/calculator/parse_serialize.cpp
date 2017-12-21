@@ -1,12 +1,6 @@
-#include "parse_.h"
-using namespace std;
+#include "calculator.h"
 
-struct op {
-  op_type type;
-  double val;
-  op(double value) : val(value) { type = NUM; }
-  op(op_type T, double value = 0) : type(T), val(value) {}
-};
+using namespace std;
 
 op_type classify_character(char ch) {
   // 字符分类函数
@@ -40,7 +34,7 @@ op_type classify_character(char ch) {
       break;
   }
 
-  if (ch >= '0' && ch <= '9' || ch == '.') {
+  if ((ch >= '0' && ch <= '9') || ch == '.') {
     return NUM;
   } else if ((ch > 'a' && ch < 'z') || (ch > 'A' && ch < 'Z')) {
     return LETTER;
@@ -98,7 +92,7 @@ vector<op> serialize(string str) {
       }
       head--;
 
-      double value = atof(str.substr(op, head - op));
+      double value = atof(str.substr(op, head - op).c_str());
       serial.push_back(op(value));
     } else {
       // 若为运算符

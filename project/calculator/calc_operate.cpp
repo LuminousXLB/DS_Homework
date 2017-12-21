@@ -1,6 +1,16 @@
-#include "stdlib.h"
+#include "calculator.h"
 
 using namespace std;
+
+double factorial(double num) {
+  // 阶乘算法
+  double ret = 1;
+  while (num > 0) {
+    ret *= num;
+    --num;
+  }
+  return ret;
+}
 
 void binaryOp(op_type op, stack<double>& num) {
   // 计算二元运算符运算结果
@@ -36,7 +46,7 @@ void binaryOp(op_type op, stack<double>& num) {
       num.push(pow(num2, num1));
       break;
     default:
-      throw "ERROR: Invalid Operator";
+      throw "ERROR: Invalid Operator [from `binaryOp`]";
   }
 }
 
@@ -55,15 +65,7 @@ void singleOp(op_type op, stack<double>& num) {
     case FACT:
       num.push(factorial(num1));
       break;
+    default:
+      throw "ERROR: Invalid Operator [from `singleOp`]";
   }
-}
-
-double factorial(double num) {
-  // 阶乘算法
-  double ret = 1;
-  while (num > 0) {
-    ret *= num;
-    --num;
-  }
-  return ret;
 }
