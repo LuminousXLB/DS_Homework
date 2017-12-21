@@ -1,9 +1,0 @@
-C:\Users\john9\AppData\Local\Temp\cctJJ44Q.o:calc_operate.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
-C:\Users\john9\AppData\Local\Temp\cczp15CN.o:calc_calculate.cpp:(.text+0x0): first defined here
-C:\Users\john9\AppData\Local\Temp\cciu9tD8.o:main.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
-C:\Users\john9\AppData\Local\Temp\cczp15CN.o:calc_calculate.cpp:(.text+0x0): first defined here
-C:\Users\john9\AppData\Local\Temp\ccOmaBNR.o:parse_balance.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
-C:\Users\john9\AppData\Local\Temp\cczp15CN.o:calc_calculate.cpp:(.text+0x0): first defined here
-C:\Users\john9\AppData\Local\Temp\ccMuGzBd.o:parse_serialize.cpp:(.text+0x0): multiple definition of `eval_calc(std::__cxx11::basic_string<char, std::char_traits<char>, std::allocator<char> >)'
-C:\Users\john9\AppData\Local\Temp\cczp15CN.o:calc_calculate.cpp:(.text+0x0): first defined here
-collect2.exe: error: ld returned 1 exit status
