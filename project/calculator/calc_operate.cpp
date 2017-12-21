@@ -17,13 +17,13 @@ void binaryOp(op_type op, stack<double>& num) {
   // 读取两个操作数
   double num1, num2;
   if (num.empty()) {
-    throw "ERROR: Invalid Experission";
+    throw "ERROR: Invalid Experission [from `binaryOp`]";
   } else {
     num1 = num.top();
     num.pop();
   }
   if (num.empty()) {
-    throw "ERROR: Invalid Experission";
+    throw "ERROR: Invalid Experission [from `binaryOp`]";
   } else {
     num2 = num.top();
     num.pop();
@@ -64,6 +64,33 @@ void singleOp(op_type op, stack<double>& num) {
   switch (op) {
     case FACT:
       num.push(factorial(num1));
+      break;
+    case COS:
+      num.push(cos(num1));
+      break;
+    case SIN:
+      num.push(sin(num1));
+      break;
+    case TAN:
+      num.push(tan(num1));
+      break;
+    case ACOS:
+      num.push(acos(num1));
+      break;
+    case ASIN:
+      num.push(asin(num1));
+      break;
+    case ATAN:
+      num.push(atan(num1));
+      break;
+    case EXP:
+      num.push(exp(num1));
+      break;
+    case LOG:
+      num.push(log(num1));
+      break;
+    case LOG10:
+      num.push(log10(num1));
       break;
     default:
       throw "ERROR: Invalid Operator [from `singleOp`]";

@@ -8,10 +8,10 @@ int main() {
   cout << "Press Ctrl+C to exit ..." << endl;
   char str[80] = {0};
   cout << "> ";
-  while (cin >> str) {
+  while (cin.getline(str, 80)) {
     try {
       cout << eval_calc(str) << endl;
-    } catch (char const * err) {
+    } catch (char const* err) {
       if (__DEBUG__) {
         cout << err << endl;
       } else {

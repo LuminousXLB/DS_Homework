@@ -39,7 +39,8 @@ op_type classify_character(char ch) {
   } else if ((ch > 'a' && ch < 'z') || (ch > 'A' && ch < 'Z')) {
     return LETTER;
   } else {
-    throw "ERROR: Invalid Character Found";
+    cerr << ch << "(" << unsigned(ch) << ")" << endl;
+    throw "ERROR: Invalid Character Found [from `classify_character`]";
   }
 
   return EOL;
@@ -72,6 +73,10 @@ vector<op> serialize(string str) {
 
   while (++head < str.length()) {
     ch = str[head];
+
+    // clog << ch << "(" << unsigned(ch) << ")" << endl;
+
+    if (ch == ' ') continue;
     type = classify_character(ch);
 
     if (type == LETTER) {
@@ -81,16 +86,16 @@ vector<op> serialize(string str) {
           break;
         }
       }
-      throw "ERROR: Invalid Character Found";
+      cerr << ch << "(" << unsigned(ch) << ")" << endl;
+      throw "ERROR: Invalid Character Found [from `serialize`]";
     } else if (type == NUM) {
       // 若为数
       size_t start = head;
       while (head < str.length()) {
-        if (classify_character(str[head]) != NUM) {
+        if (str[head] != ' ' && classify_character(str[head]) != NUM) {
           break;
-        } else {
-          head++;
         }
+        head++;
       }
 
       double value = atof(str.substr(start, head - start).c_str());

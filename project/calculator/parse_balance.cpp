@@ -6,14 +6,14 @@ size_t balance(const string &str, const size_t oparen) {
   size_t head = oparen;
   stack<char> pool;
   if (str[oparen] != '(') {
-    throw "ERROR: Open Parentheses Not Found";
+    throw "ERROR: Open Parentheses Not Found [from `balance`]";
   }
   while (char ch = str[head]) {
     if (ch == '(') {
       pool.push('(');
     } else if (ch == ')') {
       if (pool.empty()) {
-        throw "ERROR: Parentheses Unbalanced";
+        throw "ERROR: Parentheses Unbalanced [from `balance`]";
       } else {
         pool.pop();
         if (pool.empty()) {
@@ -22,7 +22,7 @@ size_t balance(const string &str, const size_t oparen) {
       }
     }
     if (++head >= str.length()) {
-      throw "ERROR: Parentheses Unbalanced";
+      throw "ERROR: Parentheses Unbalanced [from `balance`]";
     }
   }
 
