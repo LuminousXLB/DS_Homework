@@ -60,10 +60,12 @@ op_type classify_character(char ch) {
 
 vector<op> serialize(string str) {
   // 整理字符串为操作符序列
-  const static string tr_ops[9] = {"cos",  "sin", "tan", "acos", "asin",
-                                   "atan", "exp", "log", "log10"};
-  const static op tr_lst[9] = {COS,  SIN, TAN, ACOS, ASIN,
-                               ATAN, EXP, LOG, LOG10};
+  const size_t op_lst_len = 10;
+  const size_t op_max_len = 5;
+  const static string tr_ops[op_lst_len] = {"cos",  "sin", "tan", "acos", "asin",
+                                   "atan", "exp", "log", "log10", "PI"};
+  const static op tr_lst[op_lst_len] = {COS,  SIN, TAN, ACOS, ASIN,
+                               ATAN, EXP, LOG, LOG10, PI};
 
   vector<op> serial;
 
@@ -80,8 +82,8 @@ vector<op> serialize(string str) {
     type = classify_character(ch);
 
     if (type == LETTER) {
-      for (size_t i = 0; i < 9; ++i) {
-        if (str.find(tr_ops[i]) == head) {
+      for (size_t i = 0; i < op_lst_len; ++i) {
+        if (str.substr(head, op_max_len).find(tr_ops[i]) == 0) {
           serial.push_back(op(tr_lst[i]));
           break;
         }

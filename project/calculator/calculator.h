@@ -7,10 +7,14 @@
 
 using namespace std;
 
-/*************************  OPERATOR DEFINE  **********************************/
+const double __PI__ = 3.1415926535898;
+
+/*************************  OPERATOR DEFINE
+ **********************************/
 
 enum op_type {
   NUM,
+  PI,
   OPAR,  // 开括号
   ADD,
   SUB,
@@ -43,16 +47,17 @@ class op {
 /*************************  PARSE  ********************************************/
 
 /**
- * File: `parse_balance.cpp`
- */
-string content_between_parens(string str);
-
-/**
  * File: `parse_serialize.cpp`
  */
 vector<op> serialize(string str);
 
 /*************************  CALCULATE  ****************************************/
+
+/**
+ * File: `calc_balance.cpp`
+ */
+size_t balance(const vector<op>& serial, const size_t oparen);
+vector<op> content_between_parens(const vector<op>& serial, size_t oparen);
 
 /**
  * File: `calc_operate.cpp`
