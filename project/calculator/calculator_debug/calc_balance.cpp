@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "calculator.h"
 
 using namespace std;

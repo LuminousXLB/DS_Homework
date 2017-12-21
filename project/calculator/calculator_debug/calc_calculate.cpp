@@ -1,3 +1,4 @@
+#include "stdafx.h"
 #include "calculator.h"
 
 using namespace std;
@@ -34,8 +35,7 @@ double calculate(vector<op> serial) {
       case LOG10: {
         ++i;
         size_t cparen = balance(serial, i);
-        vector<op> cont(serial.begin() + i + 1,
-                        serial.begin() + cparen - i - 1);
+		vector<op> cont(serial.begin() + i + 1, serial.begin() + cparen);
         double val = calculate(cont);
         numStack.push(val);
         singleOp(cur.type, numStack);
@@ -48,7 +48,10 @@ double calculate(vector<op> serial) {
         }
         if (opStack.top() != OPAR) {
           throw "ERROR: Invalid Experission [from `calculate`] - Parentheses Unbalanced";
-        }
+		}
+		else {
+			opStack.pop();
+		}
         break;
       case OPAR:
         opStack.push(cur.type);
@@ -66,7 +69,7 @@ double calculate(vector<op> serial) {
         break;
       case ADD:
       case SUB:
-        while (!opStack.empty()) {
+        while (!opStack.empty() && opStack.top() != OPAR) {
           binaryOp(opStack.top(), numStack);
           opStack.pop();
         }
