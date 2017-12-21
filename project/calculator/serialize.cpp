@@ -1,52 +1,56 @@
-#include "stdafx.h"
 #include "calculator.h"
+#include "stdafx.h"
 
 using namespace std;
 
 op_type classify_character(char ch) {
-	// 字符分类函数
-	switch (ch) {
-	case '+':
-		return ADD;
-		break;
-	case '-':
-		return SUB;
-		break;
-	case '*':
-		return MUL;
-		break;
-	case '/':
-		return DIV;
-		break;
-	case '^':
-		return POW;
-		break;
-	case '!':
-		return FACT;
-		break;
-	case '(':
-		return OPAR;
-		break;
-	case ')':
-		return CPAR;
-		break;
-	case '\0':
-		return EOL;
-		break;
-	}
+  // 字符分类函数
+  switch (ch) {
+    case '+':
+      return ADD;
+      break;
+    case '-':
+      return SUB;
+      break;
+    case '*':
+      return MUL;
+      break;
+    case '/':
+      return DIV;
+      break;
+    case '^':
+      return POW;
+      break;
+    case '!':
+      return FACT;
+      break;
+    case '(':
+      return OPAR;
+      break;
+    case ')':
+      return CPAR;
+      break;
+    case 'x':
+      return VAR;
+      break;
+    case '=':
+      return EQ;
+      break;
+    case '\0':
+      return EOL;
+      break;
+  }
 
-	if ((ch >= '0' && ch <= '9') || ch == '.') {
-		return NUM;
-	}
-	else if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
-		return LETTER;
-	}
-	else {
-		cerr << ch << "(" << unsigned(ch) << ")" << endl;
-		throw "ERROR: Invalid Character Found [from `classify_character`]";
-	}
+  if ((ch >= '0' && ch <= '9') || ch == '.') {
+    return NUM;
+  } else if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z')) {
+    return LETTER;
+  } else {
+    cerr << ch << "(" << unsigned(ch) << ")" << endl;
+    throw "ERROR: Invalid Character Found [from `classify_character`]";
+  }
 
-	return EOL;
+  return EOL;
 }
 
 // string capticalize(string str) {
@@ -61,72 +65,79 @@ op_type classify_character(char ch) {
 //   return cap;
 // }
 
-vector<op> serialize(string str) {
-	// 整理字符串为操作符序列
-	const size_t op_lst_len = 10;
-	const size_t op_max_len = 5;
-	const static string tr_ops[op_lst_len] = { "cos",  "sin", "tan", "acos", "asin",
-									 "atan", "exp", "log10", "log", "PI" };
-	const static op tr_lst[op_lst_len] = { COS,  SIN, TAN, ACOS, ASIN,
-								 ATAN, EXP, LOG10, LOG, PI };
+vector<op> serialize(string str, bool& eq_flag) {
+  // 整理字符串为操作符序列
+  eq_flag = false;
 
-	vector<op> serial;
+  const size_t op_lst_len = 10;
+  const size_t op_max_len = 5;
+  const static string tr_ops[op_lst_len] = {
+      "cos", "sin", "tan", "acos", "asin", "atan", "exp", "log10", "log", "PI"};
+  const static op tr_lst[op_lst_len] = {COS,  SIN, TAN,   ACOS, ASIN,
+                                        ATAN, EXP, LOG10, LOG,  PI};
 
-	size_t head = -1;
-	char ch;
-	op_type type;
+  vector<op> serial;
 
-	while (++head < str.length()) {
-		ch = str[head];
+  size_t head = -1;
+  char ch;
+  op_type type;
 
-		// clog << ch << "(" << unsigned(ch) << ")" << endl;
+  while (++head < str.length()) {
+    ch = str[head];
 
-		if (ch == ' ') continue;
-		type = classify_character(ch);
+    // clog << ch << "(" << unsigned(ch) << ")" << endl;
 
-		if (type == LETTER) {
-			string sub = str.substr(head, op_max_len);
-			string match;
-			for (size_t i = 0; i < op_lst_len; ++i) {
-				if (sub.find(tr_ops[i]) == 0) {
-					serial.push_back(op(tr_lst[i]));
-					match = tr_ops[i];
-					break;
-				}
-			}
-			if (match.length()) {
-				head += match.length() - 1;
-			}
-			else {
-				cerr << ch << "(" << unsigned(ch) << ")" << endl;
-				throw "ERROR: Invalid Character Found [from `serialize`]";
-			}
-		}
-		else if (type == NUM) {
-			// 若为数
-			size_t start = head;
-			while (head < str.length()) {
-				if (str[head] != ' ' && classify_character(str[head]) != NUM) {
-					break;
-				}
-				head++;
-			}
+    if (ch == ' ') continue;
+    type = classify_character(ch);
 
-			double value = atof(str.substr(start, head - start).c_str());
-			serial.push_back(op(value));
+    if (type == LETTER) {
+      string sub = str.substr(head, op_max_len);
+      string match;
+      for (size_t i = 0; i < op_lst_len; ++i) {
+        if (sub.find(tr_ops[i]) == 0) {
+          serial.push_back(op(tr_lst[i]));
+          match = tr_ops[i];
+          break;
+        }
+      }
+      if (match.length()) {
+        head += match.length() - 1;
+      } else {
+        cerr << ch << "(" << unsigned(ch) << ")" << endl;
+        throw "ERROR: Invalid Character Found [from `serialize`]";
+      }
+    } else if (type == NUM) {
+      // 若为数
+      size_t start = head;
+      while (head < str.length()) {
+        if (str[head] != ' ' && classify_character(str[head]) != NUM) {
+          break;
+        }
+        head++;
+      }
 
-			head--;
-		}
-		else {
-			// 若为运算符
-			if (type == SUB) {
-				if (serial.empty() || serial.back().type == OPAR) {
-					serial.push_back(op(0));
-				}
-			}
-			serial.push_back(op(type));
-		}
-	}
+      double value = atof(str.substr(start, head - start).c_str());
+      serial.push_back(op(value));
 
-	return serial;
+      head--;
+    } else if (type == EQ) {
+      if (eq_flag) {
+        throw "ERROR: Invalid Character Found [from `serialize`]";
+      } else {
+        eq_flag = true;
+        str = string("-(") + str.substr(head + 1) + string(")");
+        head = -1;
+      }
+    } else {
+      // 若为运算符
+      if (type == SUB) {
+        if (serial.empty() || serial.back().type == OPAR) {
+          serial.push_back(op(0));
+        }
+      }
+      serial.push_back(op(type));
+    }
+  }
+
+  return serial;
 }

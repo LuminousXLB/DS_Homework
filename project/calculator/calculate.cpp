@@ -1,16 +1,11 @@
-#include "stdafx.h"
 #include "calculator.h"
+#include "stdafx.h"
 
 using namespace std;
 
-double calculate(vector<op> serial) {
-  // 考虑基础题模式
-  // 实现'+', '-', '*', '/', '^', '!'
-  // 不包含`(`和`)`
-
+double calculate(const vector<op>& serial) {
   stack<double> numStack;
   stack<op_type> opStack;
-  // 1.2 + 2 * 3 / 4 + 2 ^ 3 + 3 !
 
   for (size_t i = 0; i < serial.size(); i++) {
     op cur = serial[i];
@@ -35,7 +30,7 @@ double calculate(vector<op> serial) {
       case LOG10: {
         ++i;
         size_t cparen = balance(serial, i);
-		vector<op> cont(serial.begin() + i + 1, serial.begin() + cparen);
+        vector<op> cont(serial.begin() + i + 1, serial.begin() + cparen);
         double val = calculate(cont);
         numStack.push(val);
         singleOp(cur.type, numStack);
@@ -48,10 +43,9 @@ double calculate(vector<op> serial) {
         }
         if (opStack.top() != OPAR) {
           throw "ERROR: Invalid Experission [from `calculate`] - Parentheses Unbalanced";
-		}
-		else {
-			opStack.pop();
-		}
+        } else {
+          opStack.pop();
+        }
         break;
       case OPAR:
         opStack.push(cur.type);
@@ -76,7 +70,7 @@ double calculate(vector<op> serial) {
         opStack.push(cur.type);
         break;
       default:
-        throw "TODO: Not Finished [from `calculate`]";
+        throw "ERROR: Unexpected op type [from `calculate`]";
     }
   }
   // 扫尾
