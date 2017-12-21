@@ -52,26 +52,26 @@ public:
 /*************************  PARSE  ********************************************/
 
 /**
- * File: `parse_serialize.cpp`
+ * File: `serialize.cpp`
  */
 vector<op> serialize(string str);
 
 /*************************  CALCULATE  ****************************************/
 
 /**
- * File: `calc_balance.cpp`
+ * File: `balance.cpp`
  */
 size_t balance(const vector<op>& serial, const size_t oparen);
 vector<op> content_between_parens(const vector<op>& serial, size_t oparen);
 
 /**
- * File: `calc_operate.cpp`
+ * File: `operate.cpp`
  */
 void binaryOp(op_type op, stack<double>& num);
 void singleOp(op_type op, stack<double>& num);
 
 /**
- * File: `calc_calculate.cpp`
+ * File: `calculate.cpp`
  */
 double calculate(vector<op> serial);
 
