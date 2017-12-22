@@ -1,5 +1,5 @@
-#include "stdafx.h"
 #include "calculator.h"
+#include "stdafx.h"
 
 using namespace std;
 

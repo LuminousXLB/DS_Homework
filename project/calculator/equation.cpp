@@ -1,4 +1,5 @@
 #include "calculator.h"
+#include "stdafx.h"
 
 double findvalue(vector<op> serial, double x) {
   for (size_t i = 0; i < serial.size(); ++i) {
@@ -14,11 +15,16 @@ double find_next_x(vector<op> serial, double x, double step) {
   if (fabs(y) < __solution_accuracy__) {
     throw x;
   }
-  double y2 = findvalue(serial, x + step);
-  if (fabs(y2) < __solution_accuracy__) {
-    throw x + step;
+  double y2 = y;
+  double x2 = x;
+  while (fabs(y2 - y) < __solution_accuracy__ / 10) {
+    x2 += step;
+    y2 = findvalue(serial, x2);
+    if (fabs(y2) < __solution_accuracy__) {
+      throw x2;
+    }
   }
-  double slope = (y2 - y) / step;
+  double slope = (y2 - y) / (x2 - x);
   return x - (y / slope);
 }
 

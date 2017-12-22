@@ -9,8 +9,8 @@ using namespace std;
 
 const double __PI__ = 3.141592653589793238462643383279;  // PI的取值
 const double __angular_accuracy__ = 1e6;  // 用于使三角函数返回值正常显示
-const double __solution_accuracy__ = 1e4;  // 用于使三角函数返回值正常显示
-const bool __DEG__ = true;                 // 角度制
+const double __solution_accuracy__ = 1e-6;  // 用于使三角函数返回值正常显示
+const bool __DEG__ = true;                  // 角度制
 
 /*************************  OPERATOR DEFINE  **********************************/
 
@@ -88,8 +88,7 @@ double findx(vector<op> serial, double x0,
              double step = __solution_accuracy__ / 10);
 double solve(vector<op> serial);
 
-/*************************  INTERFACE
- * ****************************************/
+/*************************  INTERFACE  ****************************************/
 
 /**
  * File: `interface.cpp`

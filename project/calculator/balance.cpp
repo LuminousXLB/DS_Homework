@@ -1,5 +1,5 @@
-#include "stdafx.h"
 #include "calculator.h"
+#include "stdafx.h"
 
 using namespace std;
 
@@ -34,6 +34,6 @@ size_t balance(const vector<op> &serial, const size_t oparen) {
 vector<op> content_between_parens(const vector<op> &serial, size_t oparen) {
   size_t cparen = balance(serial, oparen);
   // return serial.substr(op + 1, cparen - op - 1);
-  return vector<op>(serial.begin() + oparen + 1, serial.begin() + cparen - oparen - 1);
+  return vector<op>(serial.begin() + oparen + 1,
+                    serial.begin() + cparen - oparen - 1);
 }
-

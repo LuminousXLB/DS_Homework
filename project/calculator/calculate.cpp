@@ -4,6 +4,9 @@
 using namespace std;
 
 double calculate(const vector<op>& serial) {
+  if (serial.empty()) {
+    return 0;
+  }
   stack<double> numStack;
   stack<op_type> opStack;
 
