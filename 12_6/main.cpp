@@ -23,6 +23,7 @@ size_t fi(string target) {
 
 int main() {
   adjListGraph<string, int> graph(14, courses);
+
   graph.insert(fi("MA080"), fi("PH114"), 1);
   graph.insert(fi("MA080"), fi("MA077"), 1);
   graph.insert(fi("MA080"), fi("MA081"), 1);
@@ -43,5 +44,9 @@ int main() {
   graph.insert(fi("PH223"), fi("PH303"), 1);
   graph.insert(fi("PH302"), fi("PH303"), 1);
 
-  
+  int cnt = graph.HierarchicalTopology();
+
+  cout << "最少需要" << cnt << "个学期" << endl;
+
+  return 0;
 }

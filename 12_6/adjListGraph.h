@@ -14,7 +14,7 @@ class adjListGraph : public graph<TypeOfEdge> {
   bool exist(int u, int v) const;
   void dfs() const;
   void bfs() const;
-  void EulerCircuit(TypeOfVer start);
+  // void EulerCircuit(TypeOfVer start);
   void topSort() const;
   ~adjListGraph();
 
@@ -35,19 +35,65 @@ class adjListGraph : public graph<TypeOfEdge> {
     edgeNode *head;  //对应单链表的头指针(edgeNode类型)
     verNode(edgeNode *h = NULL) { head = h; }
   };
-  struct EulerNode {
-    int NodeNum;      //节点号
-    EulerNode *next;  //指向结点在回上的后继
-    EulerNode(int ver) {
-      NodeNum = ver;
-      next = NULL;
-    }
-  };
+  // struct EulerNode {
+  //   int NodeNum;      //节点号
+  //   EulerNode *next;  //指向结点在回上的后继
+  //   EulerNode(int ver) {
+  //     NodeNum = ver;
+  //     next = NULL;
+  //   }
+  // };
   verNode *verList;  //指向顶点表数组的指针
 
   void dfs(int start, bool p[]) const;
-  EulerNode *EulerCircuit(int start, EulerNode *&end);
+  // EulerNode *EulerCircuit(int start, EulerNode *&end);
   verNode *clone() const;
+
+ public:
+  int HierarchicalTopology() const {
+    linkQueue<int> q;
+    int count = 0;
+    int current, *inDegree = new int[Vers];  //用于记录节点入度
+    /******** Calculate Indegree ********/
+    for (int i = 0; i < Vers; ++i) {
+      inDegree[i] = 0;
+    }
+    for (int i = 0; i < Vers; ++i) {  //遍历每个节点对应的边表
+      for (edgeNode *p = verList[i].head; p != NULL; p = p->next) {
+        ++inDegree[p->end];  //边表中记录的每个节点入度加1
+      }
+    }
+    /******** find the vers whoes indegree is 0 ********/
+    for (int i = 0; i < Vers; ++i) {
+      if (inDegree[i] == 0) {
+        q.enQueue(i);  //所有入度为0的节点入队
+      }
+    }
+    q.enQueue(-1);  // add -1 as seperator
+    /******** top ********/
+    cout << "拓扑排序为：" << endl;
+    while (!q.isEmpty()) {    //如果队列不为空则循环
+      current = q.deQueue();  //出队最前面的元素
+      if (current == -1) {
+        // when one layer has been covered
+        cout << endl;   // start a newline
+        ++count;        // grow the counter
+        if(q.isEmpty()) {
+          break;
+        }
+        q.enQueue(-1);  // add a new seperator
+        continue;
+      }
+      cout << verList[current].ver << '\t';
+      for (edgeNode *p = verList[current].head; p != NULL; p = p->next) {
+        if (--inDegree[p->end] == 0) {  //出队节点的后继入度减1
+          q.enQueue(p->end);            //入度为0的节点入队
+        }
+      }
+    }
+    cout << endl;
+    return count;
+  }
 };
 
 template <class TypeOfVer, class TypeOfEdge>
@@ -171,89 +217,88 @@ void adjListGraph<TypeOfVer, TypeOfEdge>::bfs() const {
 }
 
 // private
-template <class TypeOfVer, class TypeOfEdge>
-typename adjListGraph<TypeOfVer, TypeOfEdge>::EulerNode *
-adjListGraph<TypeOfVer, TypeOfEdge>::EulerCircuit(int start, EulerNode *&end) {
-  //采用类DFS搜索，‘类’表示不完全一样
-  //因为这里没有对访问节点做标记，允许一个回的头尾重合，允许一个节点被访问多次
-  EulerNode *beg;
-  int nextNode;
-  beg = end = new EulerNode(
-      start);  //初始回的起始指针和终了指针节指向同一个存储start的链表单元
+// template <class TypeOfVer, class TypeOfEdge>
+// typename adjListGraph<TypeOfVer, TypeOfEdge>::EulerNode *
+// adjListGraph<TypeOfVer, TypeOfEdge>::EulerCircuit(int start, EulerNode *&end) {
+//   //采用类DFS搜索，‘类’表示不完全一样
+//   //因为这里没有对访问节点做标记，允许一个回的头尾重合，允许一个节点被访问多次
+//   EulerNode *beg;
+//   int nextNode;
+//   beg = end = new EulerNode(
+//       start);  //初始回的起始指针和终了指针节指向同一个存储start的链表单元
 
-  while (verList[start].head != NULL) {
-    nextNode = verList[start].head->end;  // start边表下一节点
-    remove(start, nextNode);              //删除已经被访问的边
-    remove(nextNode, start);              //删除已经被访问的边
-    start = nextNode;  //将nextNode作为新的起始节点继续寻路
-    end->next = new EulerNode(start);  //将新节点加入回中
-    end = end->next;                   // end指向新加入节点
-  }
-  return beg;
-  //返回指向一个回(链表)的指针
-}
+//   while (verList[start].head != NULL) {
+//     nextNode = verList[start].head->end;  // start边表下一节点
+//     remove(start, nextNode);              //删除已经被访问的边
+//     remove(nextNode, start);              //删除已经被访问的边
+//     start = nextNode;  //将nextNode作为新的起始节点继续寻路
+//     end->next = new EulerNode(start);  //将新节点加入回中
+//     end = end->next;                   // end指向新加入节点
+//   }
+//   return beg;
+//   //返回指向一个回(链表)的指针
+// }
 
-template <class TypeOfVer, class TypeOfEdge>
-void adjListGraph<TypeOfVer, TypeOfEdge>::EulerCircuit(TypeOfVer start) {
-  //指定起始节点start
-  EulerNode *beg, *end, *p, *q, *tb, *te;  // beg, end欧拉回起始点
-  int numOfDegree;
-  edgeNode *r;                      //用于指向某个边表
-  verNode *tmp;                     //用于临时保存图
-  for (int i = 0; i < Vers; ++i) {  //通过节点度检查欧拉回的存在性
-    numOfDegree = 0;
-    r = verList[i].head;
-    while (r != NULL) {
-      ++numOfDegree;
-      r = r->next;
-    }
-    if (numOfDegree == 0 || numOfDegree % 2)  //度为0或奇数
-    {
-      cout << "不存在欧拉回路" << endl;
-      return;
-    }
-  }
-
-  //寻找起始结点的编号i
-  int i;
-  for (i = 0; i < Vers; ++i)
-    if (verList[i].ver == start) break;  //找到则跳出循环
-  if (i == Vers) {  //未找到起始节点，因为0<start<Vers
-    cout << "起始结点不存在" << endl;
-    return;
-  }
-  //创建一份邻接表的拷贝以便恢复邻接表
-  tmp = clone();  //因为私有函数中有删除边的行为
-  //寻找从i出发的路径，
-  //路径的起点和终点地址分别是beg和end
-  beg = EulerCircuit(i, end);  //返回从i=start开始的一条回路
-  while (true) {               //上面的EulerCircuit是找出第一条回路
-    p = beg;                   //让p指向当前寻找到的回路
-    while (p->next != NULL)    //回路中是否有顶点的边未被访问
-      if (verList[p->next->NodeNum].head != NULL)
-        break;
-      else
-        p = p->next;  //红字表示该顶点有未访问边，否则p后移
-    if (p->next == NULL) break;  //回中所有顶点的边都被访问了
-    q = p->next;  //有未访问边：q指向含尚未访问边的节点
-    tb = EulerCircuit(q->NodeNum, te);  //找以tb起始以te终了回
-    te->next = q->next;                 //和原来的回连接起来
-    p->next = tb;                       //
-    delete q;
-  }
-  //恢复原图
-  delete[] verList;
-  verList = tmp;
-  //显示得到的欧拉回路
-  cout << "欧拉回路是：" << endl;
-  while (beg != NULL) {  //打印欧拉回
-    cout << verList[beg->NodeNum].ver << '\t';
-    p = beg;
-    beg = beg->next;
-    delete p;
-  }
-  cout << endl;
-}
+// template <class TypeOfVer, class TypeOfEdge>
+// void adjListGraph<TypeOfVer, TypeOfEdge>::EulerCircuit(TypeOfVer start) {
+//   //指定起始节点start
+//   EulerNode *beg, *end, *p, *q, *tb, *te;  // beg, end欧拉回起始点
+//   int numOfDegree;
+//   edgeNode *r;                      //用于指向某个边表
+//   verNode *tmp;                     //用于临时保存图
+//   for (int i = 0; i < Vers; ++i) {  //通过节点度检查欧拉回的存在性
+//     numOfDegree = 0;
+//     r = verList[i].head;
+//     while (r != NULL) {
+//       ++numOfDegree;
+//       r = r->next;
+//     }
+//     if (numOfDegree == 0 || numOfDegree % 2)  //度为0或奇数
+//     {
+//       cout << "不存在欧拉回路" << endl;
+//       return;
+//     }
+//   }
+//   //寻找起始结点的编号i
+//   int i;
+//   for (i = 0; i < Vers; ++i)
+//     if (verList[i].ver == start) break;  //找到则跳出循环
+//   if (i == Vers) {  //未找到起始节点，因为0<start<Vers
+//     cout << "起始结点不存在" << endl;
+//     return;
+//   }
+//   //创建一份邻接表的拷贝以便恢复邻接表
+//   tmp = clone();  //因为私有函数中有删除边的行为
+//   //寻找从i出发的路径，
+//   //路径的起点和终点地址分别是beg和end
+//   beg = EulerCircuit(i, end);  //返回从i=start开始的一条回路
+//   while (true) {               //上面的EulerCircuit是找出第一条回路
+//     p = beg;                   //让p指向当前寻找到的回路
+//     while (p->next != NULL)    //回路中是否有顶点的边未被访问
+//       if (verList[p->next->NodeNum].head != NULL)
+//         break;
+//       else
+//         p = p->next;  //红字表示该顶点有未访问边，否则p后移
+//     if (p->next == NULL) break;  //回中所有顶点的边都被访问了
+//     q = p->next;  //有未访问边：q指向含尚未访问边的节点
+//     tb = EulerCircuit(q->NodeNum, te);  //找以tb起始以te终了回
+//     te->next = q->next;                 //和原来的回连接起来
+//     p->next = tb;                       //
+//     delete q;
+//   }
+//   //恢复原图
+//   delete[] verList;
+//   verList = tmp;
+//   //显示得到的欧拉回路
+//   cout << "欧拉回路是：" << endl;
+//   while (beg != NULL) {  //打印欧拉回
+//     cout << verList[beg->NodeNum].ver << '\t';
+//     p = beg;
+//     beg = beg->next;
+//     delete p;
+//   }
+//   cout << endl;
+// }
 
 template <class TypeOfVer, class TypeOfEdge>
 typename adjListGraph<TypeOfVer, TypeOfEdge>::verNode *
