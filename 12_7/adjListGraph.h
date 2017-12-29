@@ -1,5 +1,6 @@
 #pragma once
 #include <iostream>
+#include <vector>
 #include "graph.h"
 #include "linkQueue.h"
 
@@ -48,6 +49,30 @@ class adjListGraph : public graph<TypeOfEdge> {
   void dfs(int start, bool p[]) const;
   EulerNode *EulerCircuit(int start, EulerNode *&end);
   verNode *clone() const;
+
+ public:
+  void find(int start, int len) {
+    vector<verNode> pool;
+    find(start, len, pool);
+  }
+
+ private:
+  void find(int start, int len, vector<verNode> &pool) {
+    verNode &elem = verList[start];
+    if (pool.size() == len) {
+      for (int i = 0; i < len; ++i) {
+        cout << pool[i].ver << ' ';
+      }
+      cout << elem.ver << endl;
+      return;
+    } else {
+      pool.push_back(elem);
+      for (edgeNode *ptr = elem.head; ptr != NULL; ptr = ptr->next) {
+        find(ptr->end, len, pool);
+      }
+      pool.pop_back();
+    }
+  }
 };
 
 template <class TypeOfVer, class TypeOfEdge>
@@ -114,7 +139,6 @@ bool adjListGraph<TypeOfVer, TypeOfEdge>::exist(int u, int v) const {
 }
 
 // public dfs
-
 template <class TypeOfVer, class TypeOfEdge>  //基于邻接表
 void adjListGraph<TypeOfVer, TypeOfEdge>::dfs() const {
   bool *visited = new bool[Vers];  //记录节点是否被遍历

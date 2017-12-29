@@ -2,7 +2,6 @@
 // 假设所有的课程在每学期都能提供给学生选修，学生每学期可以选修的课程数不限。
 // 给出一些课程以及课程之间的关系，安排一个计划，用最少的学期数修完所有的课程。
 
-#include <algorithm>
 #include <iostream>
 #include <string>
 #include "adjListGraph.h"
