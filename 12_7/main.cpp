@@ -43,9 +43,6 @@ int main() {
   graph.insert(fi("PH302"), fi("PH303"), 1);
 
   graph.find(0, 2);
-  //   int cnt = graph.HierarchicalTopology();
-
-  //   cout << "最少需要" << cnt << "个学期" << endl;
 
   return 0;
 }
